@@ -10,9 +10,10 @@ import { SafetyNotice } from "./safety-notice";
 import "@/styles/tokens.css";
 import styles from "./localized-shell.module.css";
 
-export function LocalizedShell({ locale, onLocaleChange, children }: LocalizedShellProps) {
+export function LocalizedShell({ locale, onLocaleChange, children, demo = false }: LocalizedShellProps & { demo?: boolean }) {
   const copy = locale === "ur" ? ur : en;
   const mainId = useId();
+  const providerPrivacy = demo ? copy.demoProviderPrivacy : copy.providerPrivacy;
   useEffect(() => updateDocumentLocale(locale), [locale]);
 
   return (
@@ -26,12 +27,12 @@ export function LocalizedShell({ locale, onLocaleChange, children }: LocalizedSh
         <LanguageSwitch locale={locale} onLocaleChange={onLocaleChange} label={copy.languageLabel} />
       </header>
       <main id={mainId} className={styles.main} tabIndex={-1} aria-label={copy.mainLabel}>
-        <p className={styles.preview}>{copy.preview}</p>
+        <p className={styles.preview}>{demo ? copy.demoNotice : copy.preview}</p>
         {children}
         <SafetyNotice locale={locale} />
         <footer className={styles.privacy}>
           <p>{copy.privacy}</p>
-          <p>{copy.providerPrivacy.split("OpenAI")[0]}<bdi dir="ltr">OpenAI</bdi>{copy.providerPrivacy.split("OpenAI")[1]}</p>
+          <p>{providerPrivacy.split("OpenAI")[0]}<bdi dir="ltr">OpenAI</bdi>{providerPrivacy.split("OpenAI")[1]}</p>
         </footer>
       </main>
     </div>

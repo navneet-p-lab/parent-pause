@@ -1,0 +1,12 @@
+# T07 conversation implementation plan
+
+Input `7003017`, clean independent `main`; native board confirms T02/T03/T06 accepted, radar shows no conflicting claim. Frozen `t01-v1` and T06 service handoff apply. Implement only T07; full browser journeys/release gates remain T08/T09.
+
+1. Add a pure memory-only reducer separating accepted pairs, unsent draft and one pending request snapshot. Validate input, request correlation and reply locale. Retain drafts on errors/cancellation, commit pairs only on success, enforce eight exchanges without truncation and reject stale events.
+2. Add a client adapter for same-origin POST, bounded JSON/request size, strict success/failure/status correlation and a cancellable client deadline. No browser persistence, raw error rendering, keys or server imports.
+3. Implement the bilingual composer, suggestions that populate only, loading/cancel/manual retry, inline Unicode validation, modified-Enter/IME behavior and explicit clear confirmation. Use natural document flow, visible language hint, one announcement mechanism, focus restoration without forced scrolling and persistent emergency guidance.
+4. Connect T02/T03 on the page, deriving only a nonsecret fixture-disclosure flag on the server. Update outdated preview/privacy copy in both languages. Freeze draft editing during an active request; switching language aborts that request, retains draft/history and requires an explicit new send.
+5. Add reducer/client/component regressions and real-handler fake-provider integration. Update existing shell smoke expectations for the connected page, build and run sequential Chromium/WebKit smoke/presentation checks. Use a local fixture development server for actual endpoint browser smoke; no paid calls. Keep T08's comprehensive journeys separate.
+6. Self-review while a separate Codex reviewer examines isolated snapshots at `/private/tmp/parentpause-t07-review`. Fix gaps with regressions and revalidate. Record exact evidence/log/handoff, move T07 to In Review, commit all portable changes through the required widget, then verify SHA/status and close the accepted card. T08 becomes next after acceptance.
+
+Primary owns UI/reducer/client/page and necessary copy/styles/smoke integration. Separate reviewer is read-only in an isolated worktree, with no model override. No dependency changes or public deployment intended. Urdu remains AI-authored draft pending native review.

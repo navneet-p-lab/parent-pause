@@ -1,0 +1,5 @@
+.suggestions { display: flex; flex-wrap: wrap; gap: var(--space-3); }
+.suggestions button, .clear { min-inline-size: var(--control-min-height); min-block-size: var(--control-min-height); padding: var(--space-3) var(--space-4); font: inherit; border-radius: var(--radius-control); border: 1px solid var(--color-action); background: var(--color-surface); color: var(--color-action); cursor: pointer; }
+.confirmation { padding: var(--space-4); border-radius: var(--radius-card); background: var(--color-support); margin-block: var(--space-4); }
+.confirmation h2 { font-size: 1.125em; }
+@media (max-width:639px) { .suggestions { flex-direction: column; } .suggestions button { inline-size: 100%; } }

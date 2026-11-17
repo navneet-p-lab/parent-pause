@@ -1,6 +1,6 @@
 # ParentPause
 
-An independent English/Urdu parenting-coach assessment app. **Current implementation: static English preview plus T01–T06 contracts, components, safety pipeline and bounded provider endpoint; conversation UI remains unconnected.** The bilingual shell, response renderers and deterministic safety helpers are implemented and tested separately; T07 wires the conversation page after the provider/API packets. The current product page collects no messages and makes no AI calls. T06 adds POST /api/coach separately; see the [service/API handoff](planning/contracts-t06-v1.md). See [parallel implementation evidence](planning/evidence/t02-t04-parallel.md). See the [contract/interface handoff](planning/contracts-t01-v1.md) and [T01 verification](planning/evidence/t01-contracts.md).
+An independent English/Urdu parenting-coach assessment app. **T07 now connects the bilingual composer, memory-only conversation and validated T06 endpoint.** Choose the reply language explicitly; English, Urdu and Roman Urdu inputs are accepted. Chat clears on reload or confirmed new conversation. No accounts or durable chat history. See [T07 verification](planning/evidence/t07-conversation.md) and [conversation/T08 handoff](planning/contracts-t07-v1.md).
 
 For upcoming work, read the [session directive](planning/09-session-directive.md) and [reviewer/AI interaction handoff](planning/10-reviewer-handoff.md). Read the [planning index](planning/README.md), [implementation plan and verification](planning/evidence/t00-bootstrap.md), or [parallel execution guide](planning/tasks/KANBAN.md). The [interactive design prototype](planning/mockups/parentpause.mockup.html) is separate from the application.
 
@@ -15,7 +15,7 @@ npm ci
 npm run dev
 ```
 
-Open http://127.0.0.1:3000. No environment file or API key is needed for the preview. `.env.example` documents T05 server configuration; the unconnected page never reads a provider key or calls the adapter. Do not reuse SongRise credentials. No global npm package, parent manifest, parent lockfile, database or service is needed.
+Open http://127.0.0.1:3000. For local fixture use, copy `.env.example` to `.env.local` and match APP_ORIGIN to the development URL. Fixtures need no key and display “Demo responses — no AI call.” For live use select COACH_PROVIDER=openai and explicit server-only model/key; no runtime model is chosen by this repository. Do not reuse SongRise credentials. No global npm package, parent manifest, parent lockfile, database or service is needed.
 
 On this development Mac an existing compatible runtime can be selected without changing the global default:
 
@@ -36,7 +36,7 @@ npm run test:e2e
 npm run test:presentational
 ```
 
-Browser tests start and stop a dedicated **production** server on 127.0.0.1:3210; build first and leave that port free. They cover keyboard skip navigation, automatic axe checks and reflow at 320/390/768/1440px in Chromium/WebKit, plus enlarged text and user text spacing. They reject failed assets, external requests and unexpected writes from this static shell. On Linux CI, install browsers with `npx playwright install --with-deps --only-shell chromium webkit`. Browser downloads need network access; smoke tests need no credentials or model access. The headless-only flag avoids downloading graphical Chrome that these tests do not use.
+Browser tests start and stop a dedicated **production** server on 127.0.0.1:3210; build first and leave that port free. They cover keyboard skip navigation, automatic axe checks and reflow at 320/390/768/1440px in Chromium/WebKit, plus enlarged text and user text spacing. They reject failed assets, external requests and unexpected writes during initial page rendering. On Linux CI, install browsers with `npx playwright install --with-deps --only-shell chromium webkit`. Browser downloads need network access; smoke tests need no credentials or model access. The headless-only flag avoids downloading graphical Chrome that these tests do not use.
 
 `npm run test:presentational` runs a separate Vite test host on 127.0.0.1:3211 with the actual T02/T03 components and local font. Chromium/WebKit check both locales at four widths, axe, 44px controls, per-response direction, keyboard focus, text spacing and 200%/400% text scaling. It is a fixture-only test host, not a product route, request lifecycle or live coaching journey.
 
@@ -46,7 +46,7 @@ The [adversarial review](planning/evidence/t00-review.md) records a remaining de
 
 `npm test` runs all existing Vitest suites. `npm run test:unit` now exercises T01 contracts and is required by the existing CI ownership check. `npm run test:api` runs the T05 provider/configuration/evaluation suites and is required in CI; T06 now adds endpoint, service, limits and startup-guard behavior. There is no `--passWithNoTests`. Each future packet must add behavioral tests in `src/test/unit`, `src/test/api` or `src/test/components`; Playwright specs belong in `src/test/e2e`.
 
-Production shell preview:
+Production app (live configuration or unavailable guidance; fixture mode is rejected):
 
 ```bash
 npm run build
@@ -57,7 +57,7 @@ Exact direct dependencies and transitive resolution live in this project's manif
 
 ## Handoff limits
 
-T00 acceptance was reverified in the [bootstrap reassessment](planning/evidence/session-reassessment.md) and integrated in commit `2097a2c`. T01 implements the [schemas, token names and presentational props](planning/contracts-t01-v1.md); Git/native task history records its approval/commit outcome. T02–T04 have been implemented in parallel worktrees and technically verified; see their evidence for commit status. T02–T04 were accepted at `a35f8c6`. T05 now provides the server-only adapter and opt-in harness; see the [T05 evidence](planning/evidence/t05-provider.md) and [integration handoff](planning/contracts-t05-v1.md). T05 was accepted at `0b58067`; T06 now implements the service/API with [verification](planning/evidence/t06-service.md). Confirm T06 acceptance before T07 conversation integration. Package/configuration changes after T00 belong to the integrator. Full conversation journeys, native Urdu/safeguarding review, live model evaluation, repository publication and video delivery remain later gates. The prototype and contract checks do not establish those gates.
+T00 acceptance was reverified in the [bootstrap reassessment](planning/evidence/session-reassessment.md) and integrated in commit `2097a2c`. T01 implements the [schemas, token names and presentational props](planning/contracts-t01-v1.md); Git/native task history records its approval/commit outcome. T02–T04 have been implemented in parallel worktrees and technically verified; see their evidence for commit status. T02–T04 were accepted at `a35f8c6`. T05 now provides the server-only adapter and opt-in harness; see the [T05 evidence](planning/evidence/t05-provider.md) and [integration handoff](planning/contracts-t05-v1.md). T05 was accepted at `0b58067`; T06 now implements the service/API with [verification](planning/evidence/t06-service.md). T06 was accepted at `7003017`. T07 now connects conversation state/UI; see its [verification](planning/evidence/t07-conversation.md). Confirm T07 acceptance before T08 browser journeys. Package/configuration changes after T00 belong to the integrator. Full conversation journeys, native Urdu/safeguarding review, live model evaluation, repository publication and video delivery remain later gates. The prototype and contract checks do not establish those gates.
 
 ## Provider evaluation
 
@@ -67,8 +67,14 @@ The current CLI is a direct-provider diagnostic. It cannot provide accepted setu
 
 ## Service endpoint
 
-T06 implements `POST /api/coach` with strict schemas, configured same-origin checks, a streamed 64 KiB body limit, total 20-second deadline, no-store envelopes and instance rate limits. Explicit emergencies use authored responses without a key or provider call, after transport validation. Routine requests need explicit server provider configuration. The page remains unconnected until T07.
+T06 implements `POST /api/coach` with strict schemas, configured same-origin checks, a streamed 64 KiB body limit, total 20-second deadline, no-store envelopes and instance rate limits. Explicit emergencies use authored responses without a key or provider call, after transport validation. Routine requests need explicit server provider configuration. The bilingual page now uses this endpoint through T07.
 
 Set `APP_ORIGIN` to the exact local origin. Development fixture mode (`COACH_PROVIDER=fixtures`, `npm run dev`) returns labeled deterministic clarifications without model calls; it does not establish semantic safety. `npm run start` is the production command and rejects fixtures from shell or environment files before listening. Live use requires `COACH_PROVIDER=openai`, server key and an explicitly selected available model; no model is selected by this repository.
 
 Limits default to one shared local instance bucket: 10 requests/minute and 100/hour. Optional `COACH_CLIENT_KEY_HEADER` requires a trusted gateway that strips client values and derives a validated key. Header names/values alone do not prove trust. Instances/restarts can bypass/reset in-memory limits; public hosting requires gateway/distributed limits and an enforceable spend cutoff. See [transport/error mappings and T07 integration](planning/contracts-t06-v1.md).
+
+## Conversation behavior
+
+Topic chips fill the draft without sending. Enter adds a newline; Ctrl/Command+Enter sends outside IME composition. Drafts remain until success and survive errors/cancel. Language changes cancel pending work and keep earlier replies in their original language. New conversation asks before clearing draft/history. After eight replies, start a new conversation; history is never silently truncated. All state stays in page memory; provider retention policies may still apply to live requests.
+
+T07 includes fixture-backed integration and focused two-browser smoke; T08 still owns the full maintained browser journey matrix. Native Urdu/safeguarding approval, real assistive-technology/mobile-keyboard checks and full-pipeline live model evaluation remain release gates.

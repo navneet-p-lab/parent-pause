@@ -29,8 +29,8 @@ for (const width of [320, 390, 768, 1440]) {
     await page.keyboard.press(nextLinkKey);
     await expect(page.getByRole("link", { name: "Skip to main content" })).toBeFocused();
     await page.keyboard.press("Enter");
-    await expect(heading).toBeFocused();
-    await expect(page.getByText(/Preview — no AI call/)).toBeVisible();
+    await expect(page.getByRole("main")).toBeFocused();
+    await expect(page.getByText(/Assessment demo/)).toBeVisible();
     expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     expect(failures).toEqual([]);

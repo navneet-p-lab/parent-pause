@@ -1,6 +1,6 @@
 # T07 — Connect composer and conversation lifecycle
 
-Status: To Do — not started; execution is blocked until the dependencies below are accepted and committed.
+Status: In Review — bilingual conversation, composer and memory-only lifecycle connected to T06. See [verification](../evidence/t07-conversation.md) and [T08 handoff](../contracts-t07-v1.md). Actual commit acceptance belongs to Git/native history. Comprehensive browser journeys and live/native/human gates remain T08/T09.
 
 - Dependencies: T02, T03 and T06
 - Suggested executor: Small coding model

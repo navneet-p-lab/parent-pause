@@ -18,6 +18,8 @@ export function Conversation({ turns, uiLocale, labels, status, announcement }: 
     if (!region) return;
     if (eventId === undefined) {
       region.replaceChildren();
+      region.removeAttribute("role");
+      region.setAttribute("aria-live", "polite");
       return;
     }
     if (announced.current.has(eventId)) return;
