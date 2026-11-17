@@ -1,6 +1,6 @@
 # T01 — Freeze request/response schemas and fixtures
 
-Status: To Do — not started; execution is blocked until the dependencies below are accepted and committed.
+Status: In Review — implemented and validated on 18 November 2026, with self-review and a delegated read-only technical review. Acceptance/commit outcome is recorded in Git and the native tracker. See [implementation and verification](../evidence/t01-contracts.md) and [interface revision t01-v1](../contracts-t01-v1.md). Downstream packets remain gated on the approved commit.
 
 - Dependencies: T00
 - Suggested executor: Small coding model + lead contract review

@@ -64,6 +64,8 @@ planning/                           # this package + decision log
 
 ## Wire contract (freeze in task T01)
 
+T01 implements revision `t01-v1`; see the [frozen interface handoff](contracts-t01-v1.md) for schema exports, provider wrappers, token/prop names, Unicode whitespace rules and the explicit tightening of English word targets to deterministic ceilings. Downstream implementation requires its accepted commit.
+
 All objects strict: unknown keys rejected. `requestId` is a client UUID for correlation, never authorization.
 
 ```ts

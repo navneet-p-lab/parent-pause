@@ -1,6 +1,6 @@
 # ParentPause
 
-An independent English/Urdu parenting-coach assessment app. **Current implementation: T00 bootstrap shell only.** Coaching, localization, safety routing and API behavior belong to later packets; the shell collects no messages and makes no AI calls.
+An independent English/Urdu parenting-coach assessment app. **Current implementation: static bootstrap shell plus T01 contracts and synthetic fixtures.** Coaching, localization, safety routing and API behavior belong to later packets; the shell collects no messages and makes no AI calls. See the [contract/interface handoff](planning/contracts-t01-v1.md) and [T01 verification](planning/evidence/t01-contracts.md).
 
 For upcoming work, read the [session directive](planning/09-session-directive.md) and [reviewer/AI interaction handoff](planning/10-reviewer-handoff.md). Read the [planning index](planning/README.md), [implementation plan and verification](planning/evidence/t00-bootstrap.md), or [parallel execution guide](planning/tasks/KANBAN.md). The [interactive design prototype](planning/mockups/parentpause.mockup.html) is separate from the application.
 
@@ -28,6 +28,7 @@ export PATH="/opt/homebrew/opt/node@22/bin:$PATH"
 ```bash
 npm run lint
 npm run typecheck
+npm run test:unit
 npm run test:components
 npm run build
 npx playwright install --only-shell chromium webkit
@@ -40,7 +41,7 @@ Typechecking generates Next.js route definitions before running TypeScript, so i
 
 The [adversarial review](planning/evidence/t00-review.md) records a remaining development-tool dependency advisory: picomatch has no published patched version at review time. The runtime audit is clear, but the full audit reports 16 inherited development findings. Keep lint/test tooling local and use trusted glob patterns; recheck the dependency when a patch is published.
 
-`npm test` runs all existing Vitest suites. `npm run test:unit` and `npm run test:api` deliberately exit nonzero until T01 and T06 introduce their respective suites. CI reports these categories as deferred during bootstrap, then requires them when contracts/the coach route or category tests exist. There is no `--passWithNoTests`. Each future packet must add behavioral tests in `src/test/unit`, `src/test/api` or `src/test/components`; Playwright specs belong in `src/test/e2e`.
+`npm test` runs all existing Vitest suites. `npm run test:unit` now exercises T01 contracts and is required by the existing CI ownership check. `npm run test:api` deliberately exits nonzero until T06 introduces its suite; CI still reports that category as deferred. There is no `--passWithNoTests`. Each future packet must add behavioral tests in `src/test/unit`, `src/test/api` or `src/test/components`; Playwright specs belong in `src/test/e2e`.
 
 Production shell preview:
 
@@ -53,4 +54,4 @@ Exact direct dependencies and transitive resolution live in this project's manif
 
 ## Handoff limits
 
-T00 acceptance was reverified in the [current reassessment](planning/evidence/session-reassessment.md). The approved baseline commit integrates bootstrap and releases T01; Git/native task history records its actual outcome. The first parallel lanes are T02, T03 and T04 after T01 freezes contracts, tokens and props. Package/configuration changes after T00 belong to the integrator. Full conversation journeys, native Urdu/safeguarding review, live model evaluation, repository publication and video delivery remain later gates. The prototype and bootstrap checks do not establish those gates.
+T00 acceptance was reverified in the [bootstrap reassessment](planning/evidence/session-reassessment.md) and integrated in commit `2097a2c`. T01 implements the [schemas, token names and presentational props](planning/contracts-t01-v1.md); Git/native task history records its approval/commit outcome. The first parallel implementation lanes are T02, T03 and T04 after that acceptance. Package/configuration changes after T00 belong to the integrator. Full conversation journeys, native Urdu/safeguarding review, live model evaluation, repository publication and video delivery remain later gates. The prototype and contract checks do not establish those gates.

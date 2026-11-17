@@ -12,7 +12,7 @@ Keep messages in page memory. Do not add accounts, a database, reminders, stream
 
 The independent Git root is this project folder. Earlier SongRise nesting statements describe the original environment and are superseded for current operations. Do not copy or modify any unrelated repository, credentials or history. Inspect remotes before any future publication; no push/deployment is authorized by this directive alone.
 
-The implemented app is T00's static English shell with no input collection, API route, provider or localization. Planning includes a bilingual interactive prototype and 35 synthetic safety cases; neither establishes implemented coaching. See [current reassessment](evidence/session-reassessment.md).
+The implemented app remains T00's static English shell with no input collection, API route, provider or localization. T00 is accepted at `2097a2c`. T01 adds strict schemas, bilingual synthetic fixtures and the [t01-v1 interface handoff](contracts-t01-v1.md); see [T01 evidence](evidence/t01-contracts.md) and Git/tracker for its approval/commit outcome. Planning includes a bilingual interactive prototype and 35 synthetic safety cases; neither establishes implemented coaching. The [bootstrap reassessment](evidence/session-reassessment.md) remains dated evidence.
 
 All 11 packets T00–T10 have local native Task cards under the `parentpause` tag. Task 1 means **T00 bootstrap**, not T01 contracts. The board is local: team sync and collaborative body storage are unavailable. Portable packets remain the cross-machine source; never publish local tracker keys in commits or reviewer artifacts.
 
@@ -64,4 +64,4 @@ The outstanding picomatch development-tool advisory is recorded in [bootstrap re
 
 ## Next session
 
-If the bootstrap commit is still pending, finish that workflow first. Once accepted and committed, claim **T01 contracts**. Implement its strict schemas/fixtures and token/props handoff, with Unicode/order/bounds/unknown-field regressions. Add Zod only through the integrator, preserve exact pins, and run lint/typecheck/unit/components/build. Do not begin the localized UI or provider before the contract is frozen.
+Confirm T01's actual approved commit and closed tracker status before starting downstream implementation; finish its commit workflow if pending. After acceptance, **T02 locale shell, T03 response cards and T04 safety routing** are the next independent lanes. Read the frozen [t01-v1 interface](contracts-t01-v1.md) and preserve narrow ownership in isolated worktrees when running concurrently. T02 owns CSS/dictionaries/fonts; T03 owns response/conversation rendering; T04 owns safety policy/templates/prompts and needs its lead/safety review. The integrator owns shared contracts, package/configuration and page wiring. T05 waits for T04 prompt contracts. Native Urdu/human safeguarding review remains a release gate.

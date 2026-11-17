@@ -1,10 +1,12 @@
 # Reviewer handoff and AI interaction record
 
-Snapshot: 18 November 2026, bootstrap reassessment. This is a reviewer-facing account of delivered work, decisions and evidence. Update it after each accepted packet. Git and the native board establish the actual commit/status outcome.
+Snapshot: 18 November 2026, T01 contract implementation and technical review. This is a reviewer-facing account of delivered work, decisions and evidence. Git and the native board establish the actual approval/commit outcome. Earlier bootstrap evidence remains a dated snapshot.
 
 ## What can be reviewed now
 
 ParentPause has a runnable Next.js/TypeScript English shell, isolated npm dependency/configuration setup, accessible skip navigation, preview disclosure and general emergency notice. It does not collect messages or call a provider. Lint, typecheck, component and Chromium/WebKit shell tests, and production build are implemented.
+
+T01 adds strict Zod request/response/envelope contracts, Unicode/order/length/locale/correlation validation, object-rooted provider wire shapes, shared presentational props and bilingual synthetic fixtures. See the [t01-v1 handoff](contracts-t01-v1.md) and [verification/review evidence](evidence/t01-contracts.md). Final local verification passed lint, generated-route typecheck, 153 unit tests, one component test, production build and 10 Chromium/WebKit shell cases. These schemas are not yet connected to an input or endpoint.
 
 The [bilingual responsive prototype](mockups/parentpause.mockup.html), [product brief](01-product.md), [design](02-design.md), [architecture](03-architecture.md), [decisions](04-decisions.md), [safety policy](05-safety.md), [test strategy](06-testing.md) and 11 [packets](tasks/README.md) are prepared. The 35 [synthetic evaluation cases](safety-cases.json) have not been evaluated against a live model.
 
@@ -21,11 +23,11 @@ The earlier interaction summary comes from the existing project log and decision
 | Adversarial follow-up | Retest, find gaps, fix and commit | Added generated route type validation, broader browser/reflow/network checks and ignore rules; reported unresolved development-tool advisory; prior commit is absent from current Git history |
 | Current reassessment | Reassess all work; write future-session direction and reviewer interaction record; put all 11 tasks on kanban; reopen bootstrap, finish gaps and commit all work | Verified actual source/Git/tracker state, recreated the missing local cards/dependencies, claimed T00, reconciled stale environment/status claims, added persistent agent entry point and directive, reran baseline and clean-install checks, prepared the complete initial commit |
 
-The full factual [AI-agent work log](07-agent-log.md) contains implementation decisions, rework and evidence links. AI drafted the Urdu copy and safety guidance. The owner supplied product choices. No native Urdu reader or safeguarding reviewer has approved them. This session used one primary Codex assistant; no subagents or independently assigned reviewer ran. Exact model variant is not exposed in current runtime context; older model labels are historical log claims.
+The full factual [AI-agent work log](07-agent-log.md) contains implementation decisions, rework and evidence links. AI drafted the Urdu copy and safety guidance. The owner supplied product choices. No native Urdu reader or safeguarding reviewer has approved them. Bootstrap reassessment used one primary Codex assistant without subagents. T01 used a primary Codex assistant and one delegated read-only technical reviewer in an isolated worktree, with no smaller-model override. Exact model variant is not exposed; earlier model labels are historical log claims. Technical contract review is distinct from human safety approval.
 
 ## Review standard and remaining work
 
-Bootstrap verification supports only the static shell. T01–T10 still need implementation or execution. No coaching endpoint, bilingual app, safety pipeline, live model evaluation, native-language approval, hosted CI run, published repository, deployment or walkthrough video is claimed. The [delivery storyboard](08-delivery.md) remains a plan.
+Bootstrap verification supports the static shell; T01 verification additionally supports the unconnected contract boundary. T02–T10 still need implementation or execution after T01's approved commit. No coaching endpoint, bilingual app, safety pipeline, live model evaluation, native-language approval, hosted CI run, published repository, deployment or walkthrough video is claimed. The [delivery storyboard](08-delivery.md) remains a plan.
 
 The full audit still reports 16 inherited development-tool findings from one unpatched picomatch advisory; runtime audit reports zero known findings at this snapshot. The bootstrap can be integrated with that disclosed limitation, while dependency remediation remains tracked in the review evidence. Passing automated accessibility tests does not replace screen-reader, physical-device or native-reader review.
 
@@ -34,3 +36,7 @@ For each future packet, review its changed files against the acceptance criteria
 ## Subsequent interaction record
 
 Append one row per accepted packet: date and packet, owner request/clarification, executor and input commit, actual changes, commands/results, reviewer and decision, unresolved limitation, output commit. Record a commit SHA only after it exists. Costs, token use, latency and time savings remain unmeasured until actual artifacts establish them.
+
+| Date / packet | Owner direction and execution | Verification / review / outcome |
+|---|---|---|
+| 18 November 2026 / T01 (In Review) | Start the next T00-dependent work, consider parallel execution, plan/implement/self-review/fix/revalidate/commit. Input `2097a2c`; primary Codex implemented contracts/fixtures/shared handoff, one delegated read-only reviewer ran concurrently in an isolated worktree. T01 was the only ready packet; downstream implementation stayed gated. | Lint/typecheck/build pass; unit 153/153, component 1/1, browser 10/10. Reviewer reproduced Unicode NEL whitespace and shared UI-type ownership gaps; fixes verified, final technical review passes. Same inherited 16 development findings, runtime audit zero; no live/native/human safety approval. Output commit/approval: inspect Git/native tracker; not predicted here. |
