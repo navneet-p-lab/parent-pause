@@ -1,5 +1,7 @@
 # T09 technical release review
 
+Latest live result, 18 November: the [166-attempt model comparison](t09-model-comparison-2026-11-18.md) is complete under the original US$3 envelope, with known response/content failures. New spending guard/resume/pacing and failure regression are self-reviewed; no independent reviewer was used in this resumed session. Final 500/500 deterministic tests, typecheck/lint/diff pass. Release is blocked by ambiguous-distress response availability and Luna's inspected homework false positive, plus existing human/native/manual/public-hosting gates. Total reservations US$1.615455; remaining authorizedUS$1.384545. Preparation's independent technical verdict below does not approve these later changes, the model results or human safety.
+
 18 November 2026. Input `17befd3`, independent clean main before preparation. T08 acceptance confirmed in Git/native tracker; T09 selected after radar. **Release approval is pending. T10 remains gated.** See [plan](t09-release-plan.md), [model-evaluation readiness](model-evaluation.md) and [T08 browser evidence](browser-validation.md).
 
 ## Technical scope and independent review

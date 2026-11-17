@@ -1,5 +1,9 @@
 # T09 model-evaluation readiness
 
+**Latest funded comparison, 18 November:** all **166/166 attempts completed** after the owner topped up credits. Luna matched79/83 expected routes; Terra 81/83, with one rate-limit failure retained despite a successful separate recovery. Five additional failures were review-blocked ambiguous-distress clarifications. Luna also added inappropriate crisis framing to a homework idiom despite a route pass. Known-token estimate across pilot/comparison/recovery **US$0.1102685**; total conservative reservations **US$1.615455**, leaving **US$1.384545** under the original US$3 authorization. Paired routine token estimates normalize to about US$0.35/1,000 replies for Luna andUS$3.12 for Terra. See [full comparison, content findings and recommendation](t09-model-comparison-2026-11-18.md). Terra is the stronger next-review candidate in this sample; final selection/release remain gated on ambiguity-response repairs and human/native/manual review. Human scores remain null.
+
+**Initial live attempt, 18 November:** owner configured the key and authorized a total US$3. The guarded comparison stopped after 2/166 attempts on OpenAI `credit_balance_exhausted`: one accepted English Luna plan, then Terra unavailable. Known Luna token-cost estimate US$0.0003154; Terra usage/cost unknown. US$0.017736 conservatively reserved; at most US$2.982264 remained at that point. See [initial results, budget and browser walkthrough](t09-live-evaluation-2026-11-18.md). The preparation/owner-decision sections below are historical snapshots.
+
 18 November 2026. Input `17befd3`; T08 is accepted. **No live evaluation has run and no model is selected.** Local configuration inspection found no key/model; values were never printed. No spend envelope, native Urdu review or safeguarding approval was supplied.
 
 ## Integrated runner

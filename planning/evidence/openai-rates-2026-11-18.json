@@ -1,0 +1,14 @@
+{
+  "gpt-6-luna": {
+    "inputUsdPerMillion": 0.1,
+    "outputUsdPerMillion": 0.5,
+    "source": "https://developers.openai.com/api/docs/models/gpt-6-luna",
+    "checkedAt": "2026-11-18"
+  },
+  "gpt-6.1-terra": {
+    "inputUsdPerMillion": 1,
+    "outputUsdPerMillion": 5,
+    "source": "https://developers.openai.com/api/docs/models/gpt-6.1-terra",
+    "checkedAt": "2026-11-18"
+  }
+}

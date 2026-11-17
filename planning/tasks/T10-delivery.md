@@ -1,6 +1,6 @@
 # T10 — Prepare repository, README and video handoff
 
-Status: To Do — not started; execution is blocked until the dependencies below are accepted and committed.
+Status: In Progress — owner explicitly authorized GitHub source publication on 18 November 2026 before T09 acceptance. Source history is published at https://github.com/navneet-p-lab/parent-pause with main tracking origin/main; latest evaluation/publication evidence is prepared for the owner commit widget and subsequent push. Remaining delivery/release work stays gated on T09.
 
 - Dependencies: T09 release gate
 - Suggested executor: Small coding model for docs; owner for recording/publication decisions

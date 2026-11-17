@@ -1,5 +1,7 @@
 # ParentPause
 
+GitHub destination: [navneet-p-lab/parent-pause](https://github.com/navneet-p-lab/parent-pause). Source publication does not establish release approval.
+
 An independent English/Urdu parenting-coach assessment app. **T07 now connects the bilingual composer, memory-only conversation and validated T06 endpoint.** Choose the reply language explicitly; English, Urdu and Roman Urdu inputs are accepted. Chat clears on reload or confirmed new conversation. No accounts or durable chat history. See [T07 verification](planning/evidence/t07-conversation.md) and [conversation/T08 handoff](planning/contracts-t07-v1.md).
 
 For upcoming work, read the [session directive](planning/09-session-directive.md) and [reviewer/AI interaction handoff](planning/10-reviewer-handoff.md). Read the [planning index](planning/README.md), [implementation plan and verification](planning/evidence/t00-bootstrap.md), or [parallel execution guide](planning/tasks/KANBAN.md). The [interactive design prototype](planning/mockups/parentpause.mockup.html) is separate from the application.
@@ -56,7 +58,7 @@ npm run build
 npm run start
 ```
 
-Exact direct dependencies and transitive resolution live in this project's manifest and lockfile. Next.js tracing and Turbopack roots are explicitly confined to this folder. The build uses webpack for a predictable baseline. CSS Modules are built in; no CSS framework is needed. CI is configured at this independent repository root but has not run remotely. Earlier SongRise nesting references describe the original workspace; inspect Git state before future operations. Repository publication remains a delivery task.
+Exact direct dependencies and transitive resolution live in this project's manifest and lockfile. Next.js tracing and Turbopack roots are explicitly confined to this folder. The build uses webpack for a predictable baseline. CSS Modules are built in; no CSS framework is needed. CI is configured at this independent repository root; consult GitHub Actions for remote results. Earlier SongRise nesting references describe the original workspace; inspect Git state before future operations. Source is published at the GitHub destination above; remaining delivery and release gates are pending.
 
 ## Handoff limits
 
@@ -64,7 +66,11 @@ T00 acceptance was reverified in the [bootstrap reassessment](planning/evidence/
 
 ## Provider evaluation
 
-`npm run eval:release` now prepares T09's **integrated service** evaluation and defaults to a no-network dry-run. It retains accepted setup replies, captures failed-stage usage alongside authored fallbacks, checks expected routes/categories and reports honest human-review denominators. Live execution still requires explicit candidates, a local server key, sufficient `--max-calls` and an owner-approved spend envelope. Optional supplied rate cards produce token-cost estimates, not invoices or a dollar cutoff. See [model-evaluation readiness](planning/evidence/model-evaluation.md) and [technical release review](planning/evidence/release-review.md). No live evaluation or final model/human release approval has occurred.
+The [first funded model comparison](planning/evidence/t09-model-comparison-2026-11-18.md) completed 166/166 attempts: Luna 79/83 and Terra 81/83 expected routes, with ambiguous-distress availability and content findings still blocking release. Total known-token estimates across pilot/comparison/recovery are US$0.1102685; conservative reservations US$1.615455 remain below the owner's US$3 cap. Human/native/manual reviews and final model selection remain pending. Earlier readiness statements elsewhere in this document are historical handoffs.
+
+`npm run eval:release` evaluates T09's **integrated service** and defaults to a no-network dry-run. It retains accepted setup replies, captures failed-stage usage alongside authored fallbacks, checks expected routes/categories and reports honest human-review denominators. Live execution requires explicit candidates, a local server key, sufficient `--max-calls`, positive `--max-usd`, verified `--rates` and an owner-approved spend envelope. Before each inference request, it counts exact input tokens and persists a conservative reservation for input and maximum output. Reservations are never refunded; transport failures stop the run. The limit covers this invocation's reserved token costs, excluding taxes and unrelated account usage. Carry prior reservations forward when resuming; a new invocation does not remember another artifact's budget. Counting adds latency inside the service deadline, so instrumented latency is not production latency. See [the first live attempt](planning/evidence/t09-live-evaluation-2026-11-18.md), [evaluation readiness](planning/evidence/model-evaluation.md) and [technical release review](planning/evidence/release-review.md). Final model selection and human release approval remain pending.
+
+`--resume path/to/prior.jsonl` verifies candidate/corpus/prompt/service provenance and carries earlier records forward with an artifact hash; it retains failures and marks reused observations rather than claiming new calls. `--turn-gap-ms 45000` spaces full three-stage turns by 45 seconds per model, proportionally less for classification-only turns, outside the service deadline. Authored bypasses skip pacing. Case wall latency includes these waits; do not use it to rank production model speed. A separate recovery attempt must retain the first-pass failure in the original comparison.
 
 `npm run eval:live` defaults to a no-network dry-run. `--models candidate-a,candidate-b` plans explicit candidate comparisons. Live diagnostics require `--live`, an explicit model list, server key and sufficient `--max-calls`; do not run paid evaluation without a spend envelope. Results default to ignored `evaluation-results/` JSONL files, with null human scores. No runtime model is selected.
 
