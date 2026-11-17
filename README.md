@@ -1,6 +1,6 @@
 # ParentPause
 
-An independent English/Urdu parenting-coach assessment app. **Current implementation: static bootstrap shell plus T01 contracts and synthetic fixtures.** Coaching, localization, safety routing and API behavior belong to later packets; the shell collects no messages and makes no AI calls. See the [contract/interface handoff](planning/contracts-t01-v1.md) and [T01 verification](planning/evidence/t01-contracts.md).
+An independent English/Urdu parenting-coach assessment app. **Current implementation: static English preview plus T01 contracts and unconnected T02–T04 components/policy.** The bilingual shell, response renderers and deterministic safety helpers are implemented and tested separately; T07 wires the conversation page after the provider/API packets. The current product page collects no messages and makes no AI calls. See [parallel implementation evidence](planning/evidence/t02-t04-parallel.md). See the [contract/interface handoff](planning/contracts-t01-v1.md) and [T01 verification](planning/evidence/t01-contracts.md).
 
 For upcoming work, read the [session directive](planning/09-session-directive.md) and [reviewer/AI interaction handoff](planning/10-reviewer-handoff.md). Read the [planning index](planning/README.md), [implementation plan and verification](planning/evidence/t00-bootstrap.md), or [parallel execution guide](planning/tasks/KANBAN.md). The [interactive design prototype](planning/mockups/parentpause.mockup.html) is separate from the application.
 
@@ -33,9 +33,12 @@ npm run test:components
 npm run build
 npx playwright install --only-shell chromium webkit
 npm run test:e2e
+npm run test:presentational
 ```
 
 Browser tests start and stop a dedicated **production** server on 127.0.0.1:3210; build first and leave that port free. They cover keyboard skip navigation, automatic axe checks and reflow at 320/390/768/1440px in Chromium/WebKit, plus enlarged text and user text spacing. They reject failed assets, external requests and unexpected writes from this static shell. On Linux CI, install browsers with `npx playwright install --with-deps --only-shell chromium webkit`. Browser downloads need network access; smoke tests need no credentials or model access. The headless-only flag avoids downloading graphical Chrome that these tests do not use.
+
+`npm run test:presentational` runs a separate Vite test host on 127.0.0.1:3211 with the actual T02/T03 components and local font. Chromium/WebKit check both locales at four widths, axe, 44px controls, per-response direction, keyboard focus, text spacing and 200%/400% text scaling. It is a fixture-only test host, not a product route, request lifecycle or live coaching journey.
 
 Typechecking generates Next.js route definitions before running TypeScript, so it also works before the first dev/build run. The generated type file and local editor/session assets are ignored by Git.
 
@@ -54,4 +57,4 @@ Exact direct dependencies and transitive resolution live in this project's manif
 
 ## Handoff limits
 
-T00 acceptance was reverified in the [bootstrap reassessment](planning/evidence/session-reassessment.md) and integrated in commit `2097a2c`. T01 implements the [schemas, token names and presentational props](planning/contracts-t01-v1.md); Git/native task history records its approval/commit outcome. The first parallel implementation lanes are T02, T03 and T04 after that acceptance. Package/configuration changes after T00 belong to the integrator. Full conversation journeys, native Urdu/safeguarding review, live model evaluation, repository publication and video delivery remain later gates. The prototype and contract checks do not establish those gates.
+T00 acceptance was reverified in the [bootstrap reassessment](planning/evidence/session-reassessment.md) and integrated in commit `2097a2c`. T01 implements the [schemas, token names and presentational props](planning/contracts-t01-v1.md); Git/native task history records its approval/commit outcome. T02–T04 have been implemented in parallel worktrees and technically verified; see their evidence for commit status. T05 is next after T04 acceptance; T06 and then T07 integrate the provider, endpoint and UI. Package/configuration changes after T00 belong to the integrator. Full conversation journeys, native Urdu/safeguarding review, live model evaluation, repository publication and video delivery remain later gates. The prototype and contract checks do not establish those gates.

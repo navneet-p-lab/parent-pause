@@ -1,6 +1,6 @@
 # T03 — Render structured response families
 
-Status: To Do — not started; execution is blocked until the dependencies below are accepted and committed.
+Status: In Review — implemented from accepted T01 `47728e2` in an isolated worktree, technically reviewed and validated on 18 November 2026. See [parallel implementation and verification](../evidence/t02-t04-parallel.md). Git/native tracker records actual commit acceptance. Native Urdu and human safeguarding release gates remain pending.
 
 - Dependencies: T01 (including shared token-name/props agreement; T02 CSS implementation can run in parallel)
 - Suggested executor: Small coding model

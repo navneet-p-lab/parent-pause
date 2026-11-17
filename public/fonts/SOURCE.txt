@@ -1,0 +1,6 @@
+Noto Sans Arabic variable font (width, weight), unmodified.
+Downloaded 18 November 2026 from the official Google Fonts repository:
+https://github.com/google/fonts/tree/main/ofl/notosansarabic
+Font: NotoSansArabic[wdth,wght].ttf (renamed NotoSansArabic.ttf)
+License: SIL Open Font License 1.1; see OFL.txt.
+Self-hosted; the browser makes no Google Fonts request.

@@ -2,15 +2,15 @@
 
 Reconciled 18 November 2026. The current workspace initially returned zero native tasks despite the earlier creation log. All 11 cards were recreated and read back, with native dependencies. Filter Tasks by `parentpause` to see the board. Task 1 is T00 bootstrap; original packet IDs remain unchanged.
 
-T00 was reopened In Progress for reassessment and acceptance verification, then prepared for In Review and the approved baseline commit. Git/native history records actual completion; see [current evidence](../evidence/session-reassessment.md). T01–T10 remain To Do. Read the [session directive](../09-session-directive.md) before claiming work.
+T00 and T01 are accepted at `2097a2c` and `47728e2`. T02–T04 are implemented and technically verified for In Review; see [parallel evidence](../evidence/t02-t04-parallel.md). Git/native history records actual commit acceptance. T05–T10 remain To Do. Read the [session directive](../09-session-directive.md) before claiming work.
 
 | Task | Packet | Board placement / completion gate | Dependencies |
 |---|---|---|---|
-| 1 | [T00 bootstrap](T00-bootstrap.md) | Acceptance verified; In Review until approved commit, then Done | None |
-| 2 | [T01 contracts](T01-contracts.md) | To Do | T00 |
-| 3 | [T02 localized shell](T02-localized-shell.md) | To Do | T01 |
-| 4 | [T03 response cards](T03-response-cards.md) | To Do | T01 |
-| 5 | [T04 safety](T04-safety-routing.md) | To Do | T01 |
+| 1 | [T00 bootstrap](T00-bootstrap.md) | Done; accepted `2097a2c` | None |
+| 2 | [T01 contracts](T01-contracts.md) | Done; accepted `47728e2` | T00 |
+| 3 | [T02 localized shell](T02-localized-shell.md) | In Review; approved commit pending | T01 |
+| 4 | [T03 response cards](T03-response-cards.md) | In Review; approved commit pending | T01 |
+| 5 | [T04 safety](T04-safety-routing.md) | In Review; approved commit pending | T01 |
 | 6 | [T05 provider/harness](T05-provider.md) | To Do | T01, T04 |
 | 7 | [T06 service/API](T06-service-api.md) | To Do | T04, T05 |
 | 8 | [T07 conversation](T07-conversation-ui.md) | To Do | T02, T03, T06 |

@@ -18,7 +18,8 @@
     "test:unit": "vitest run src/test/unit",
     "test:api": "vitest run src/test/api",
     "test:components": "vitest run src/test/components",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "test:presentational": "playwright test --config playwright.presentational.config.ts"
   },
   "dependencies": {
     "next": "16.4.6",

@@ -43,7 +43,7 @@ flowchart LR
   T09 --> T10[T10 delivery]
 ```
 
-T02/T03 and the safety/backend track can proceed independently after T01; use this as dependency guidance. Delegation/concurrent agent execution requires an explicit request or applicable instructions, plus isolated worktrees and narrow ownership. No delegated implementation occurred in the recorded work.
+T02/T03 and the safety/backend track can proceed independently after T01; use this as dependency guidance. Delegation/concurrent agent execution requires an explicit request or applicable instructions, plus isolated worktrees and narrow ownership. Through T01, delegation covered read-only technical review; the later T02–T04 implementation used three isolated worktrees as recorded in the parallel evidence.
 
 T05 completes the deterministic adapter/harness. T09 performs full-pipeline live evaluation and final model selection after T06 integration; do not introduce a circular dependency. Native Urdu and human safety reviews remain release gates.
 
@@ -64,4 +64,4 @@ The outstanding picomatch development-tool advisory is recorded in [bootstrap re
 
 ## Next session
 
-Confirm T01's actual approved commit and closed tracker status before starting downstream implementation; finish its commit workflow if pending. After acceptance, **T02 locale shell, T03 response cards and T04 safety routing** are the next independent lanes. Read the frozen [t01-v1 interface](contracts-t01-v1.md) and preserve narrow ownership in isolated worktrees when running concurrently. T02 owns CSS/dictionaries/fonts; T03 owns response/conversation rendering; T04 owns safety policy/templates/prompts and needs its lead/safety review. The integrator owns shared contracts, package/configuration and page wiring. T05 waits for T04 prompt contracts. Native Urdu/human safeguarding review remains a release gate.
+T01 is accepted at `47728e2`. T02 locale shell, T03 response cards and T04 safety routing have now been implemented in isolated worktrees and technically reviewed; see [parallel implementation evidence](evidence/t02-t04-parallel.md). Confirm their actual approved commit and tracker status before starting dependent work; finish the commit workflow if pending. **T05 provider adapter and deterministic evaluation harness** is next after T04 acceptance, then T06 service/API and T07 conversation-page integration. Use the frozen [t01-v1 interface](contracts-t01-v1.md) and T04's policy/prompt handoff. The product page remains an unconnected English preview until T07. The integrator owns shared contracts, package/configuration and page wiring. Native Urdu/human safeguarding review remains a release gate.

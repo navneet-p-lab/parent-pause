@@ -1,6 +1,6 @@
 # T04 — Implement authored safety routes and policy
 
-Status: To Do — not started; execution is blocked until the dependencies below are accepted and committed.
+Status: In Review — implemented from accepted T01 `47728e2` in an isolated worktree, technically reviewed and validated on 18 November 2026. See [parallel implementation and verification](../evidence/t02-t04-parallel.md). Git/native tracker records actual commit acceptance. Native Urdu and human safeguarding release gates remain pending.
 
 - Dependencies: T01
 - Suggested executor: Small coding model + stronger safety reviewer
@@ -20,5 +20,7 @@ Unit tests prove explicit risk cannot reach normal generation; unmatched or ambi
 ## Handoff
 
 Lead/safety review required before integration. A small model implements an approved policy; it does not invent safety policy or approve its own templates.
+
+Implemented interface: [t04-v1 policy/prompt handoff](../contracts-t04-v1.md). Primary lead and separate read-only technical reviews passed after the recorded fixes; native-language/qualified human safeguarding release gates remain pending. Lower known-risk categories still undergo full-context classification to detect higher urgency, retaining an authored floor on failure. A later resolved-history claim requires semantic classification plus successful candidate review before ordinary coaching can resume.
 
 Return changed files, tests/commands and actual results, known limitations, and proposed agent-log entry. Mark this task complete only when acceptance criteria pass; never report unrun checks as passed.
