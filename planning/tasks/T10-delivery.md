@@ -1,5 +1,7 @@
 # T10 — Prepare repository, README and video handoff
 
+Latest owner brief, 18 November: the supplied problem statement asks for a repository link and short README only. Final code/requirement review and README polish are authorized independently of remaining T09 acceptance; video/hosting/email sending are not required by this request. See [final overview and setup verification](../evidence/final-overview.md). Source is published at `8baf9e4`; the latest documentation/test-configuration polish remains local until committed/pushed. Existing live-quality and native/human/manual gates remain pending; this does not close T09 or automatically approve final release.
+
 Status: In Progress — owner explicitly authorized GitHub source publication on 18 November 2026 before T09 acceptance. Source history is published at https://github.com/navneet-p-lab/parent-pause with main tracking origin/main; latest evaluation/publication evidence is prepared for the owner commit widget and subsequent push. Remaining delivery/release work stays gated on T09.
 
 - Dependencies: T09 release gate

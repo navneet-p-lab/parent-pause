@@ -1,5 +1,7 @@
 # Session directive and project direction
 
+Latest owner scope, 18 November 2026: final holistic code review, README polish and coverage of the supplied assessment statement. That statement requests a GitHub repository link and short run README; it does not require a video or deployment. The [final overview](evidence/final-overview.md) records feature coverage, fresh checks and existing live-quality/human-review limits. This request authorizes the documentation/reproducibility subset of T10 alongside T09 review; it does not establish safety/release acceptance. Product safety policy/prompts/model configuration remain unchanged in this pass. Git/main and remote were verified at `8baf9e4`; this pass is uncommitted until actual approval/commit.
+
 Effective 18 November 2026. Applies to upcoming ParentPause sessions. The owner's latest instructions take precedence. This document reconciles the earlier blueprint with the actual source, repository and tracker; historical evidence remains dated evidence.
 
 ## Direction

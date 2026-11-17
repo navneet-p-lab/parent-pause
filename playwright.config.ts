@@ -21,6 +21,9 @@ export default defineConfig({
     url: baseURL,
     reuseExistingServer: false,
     timeout: 60_000,
-    env: { NEXT_TELEMETRY_DISABLED: "1" },
+    // Shell checks never send coaching requests. Override local fixture/key
+    // settings so the documented key-free setup can also test production UI.
+    env: { NEXT_TELEMETRY_DISABLED: "1", COACH_PROVIDER: "openai", OPENAI_API_KEY: "", OPENAI_MODEL: "",
+      APP_ORIGIN: baseURL, COACH_CLIENT_KEY_HEADER: "" },
   },
 });
