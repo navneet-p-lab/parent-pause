@@ -6,6 +6,8 @@ T00 was accepted and committed as `2097a2c`; see [bootstrap reassessment](../evi
 
 ## Execution order
 
+Latest T08 addition: T07 acceptance is confirmed at `197a28a`. Maintained real-network browser journeys and controlled server-side fixtures are implemented; see [plan](../evidence/t08-browser-plan.md) and [browser validation](../evidence/browser-validation.md). Verify actual T08 commit/acceptance before T09. T09 still requires configured live evaluation with an approved spend envelope and native Urdu/human safety review; automated browser checks do not satisfy those gates.
+
 ```mermaid
 flowchart LR
  T00[Bootstrap] --> T01[Contracts]

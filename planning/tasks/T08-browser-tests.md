@@ -1,6 +1,6 @@
 # T08 — Add cross-browser journeys and accessibility checks
 
-Status: To Do — not started; execution is blocked until the dependencies below are accepted and committed.
+Status: In Review — implementation, self-review, separate technical review and automated validation pass; actual acceptance/commit belongs to Git and the native tracker. Input T07 accepted at `197a28a`. See [implementation plan](../evidence/t08-browser-plan.md) and [browser validation](../evidence/browser-validation.md). Physical-device, browser-zoom, real assistive-technology and native-reader checks remain explicitly pending.
 
 - Dependencies: T07
 - Suggested executor: Small coding model; human manual checks

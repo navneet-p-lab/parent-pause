@@ -20,6 +20,7 @@
     "test:components": "vitest run src/test/components",
     "test:e2e": "playwright test",
     "test:presentational": "playwright test --config playwright.presentational.config.ts",
+    "test:journeys": "playwright test --config playwright.journeys.config.ts",
     "eval:live": "node --conditions=react-server --import tsx scripts/eval-coach.ts"
   },
   "dependencies": {

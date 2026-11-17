@@ -34,11 +34,14 @@ npm run build
 npx playwright install --only-shell chromium webkit
 npm run test:e2e
 npm run test:presentational
+npm run test:journeys
 ```
 
 Browser tests start and stop a dedicated **production** server on 127.0.0.1:3210; build first and leave that port free. They cover keyboard skip navigation, automatic axe checks and reflow at 320/390/768/1440px in Chromium/WebKit, plus enlarged text and user text spacing. They reject failed assets, external requests and unexpected writes during initial page rendering. On Linux CI, install browsers with `npx playwright install --with-deps --only-shell chromium webkit`. Browser downloads need network access; smoke tests need no credentials or model access. The headless-only flag avoids downloading graphical Chrome that these tests do not use.
 
 `npm run test:presentational` runs a separate Vite test host on 127.0.0.1:3211 with the actual T02/T03 components and local font. Chromium/WebKit check both locales at four widths, axe, 44px controls, per-response direction, keyboard focus, text spacing and 200%/400% text scaling. It is a fixture-only test host, not a product route, request lifecycle or live coaching journey.
+
+`npm run test:journeys` runs T08's real-network Chromium/WebKit conversation journeys on 127.0.0.1:3212. Keep that port free and run browser configurations and builds sequentially. The host requires development fixture mode and a blank key; Playwright supplies those settings. Default scenarios reach the original Next route. Controlled scenarios inject provider sessions through the real handler/service seams to test plans, boundaries, rejected output, deadlines, retry and cancellation without model calls. Scenario headers exist only in this test host. Evidence and remaining manual checks are in [browser validation](planning/evidence/browser-validation.md).
 
 Typechecking generates Next.js route definitions before running TypeScript, so it also works before the first dev/build run. The generated type file and local editor/session assets are ignored by Git.
 
@@ -77,4 +80,4 @@ Limits default to one shared local instance bucket: 10 requests/minute and 100/h
 
 Topic chips fill the draft without sending. Enter adds a newline; Ctrl/Command+Enter sends outside IME composition. Drafts remain until success and survive errors/cancel. Language changes cancel pending work and keep earlier replies in their original language. New conversation asks before clearing draft/history. After eight replies, start a new conversation; history is never silently truncated. All state stays in page memory; provider retention policies may still apply to live requests.
 
-T07 includes fixture-backed integration and focused two-browser smoke; T08 still owns the full maintained browser journey matrix. Native Urdu/safeguarding approval, real assistive-technology/mobile-keyboard checks and full-pipeline live model evaluation remain release gates.
+T08 adds maintained fixture-backed Chromium/WebKit journeys, including bilingual responsive accessibility and actual authored crisis layouts. Native Urdu/safeguarding approval, real assistive-technology/mobile-keyboard/browser-zoom checks and full-pipeline live model evaluation remain release gates. See [browser validation](planning/evidence/browser-validation.md) for exact verification and limitations; Git/native tracker establishes commit acceptance.
