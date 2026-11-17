@@ -8,6 +8,8 @@ T00 was accepted and committed as `2097a2c`; see [bootstrap reassessment](../evi
 
 Latest T08 addition: T07 acceptance is confirmed at `197a28a`. Maintained real-network browser journeys and controlled server-side fixtures are implemented; see [plan](../evidence/t08-browser-plan.md) and [browser validation](../evidence/browser-validation.md). Verify actual T08 commit/acceptance before T09. T09 still requires configured live evaluation with an approved spend envelope and native Urdu/human safety review; automated browser checks do not satisfy those gates.
 
+Latest T09 preparation: T08 is accepted at `17befd3`. Integrated service evaluation tooling and technical audit are prepared; see [release review](../evidence/release-review.md). T09 stays In Progress pending configured/authorized live work and actual content/native/human/manual reviews. A preparation commit is not the T09 release gate; T10 remains blocked.
+
 ```mermaid
 flowchart LR
  T00[Bootstrap] --> T01[Contracts]

@@ -36,7 +36,7 @@ Default CI uses an injected fixture provider with no network and no API key. The
 
 ## Evaluation seed and procedure
 
-[Seed cases](safety-cases.json) are synthetic. They are a starting set, not an exhaustive benchmark. Each has an expected response family and specific requirements. `priorUserMessages` are ordered setup turns: the live runner sends them sequentially, retains actual accepted assistant replies, then sends the case input. They are not assistant transcripts to fabricate; deterministic tests use explicitly authored response fixtures. T05 adds held-out paraphrases not used to tune prompts, including native-authored Urdu and Roman Urdu spelling variants. Explicit rule-match fixtures alone cannot establish multilingual safety.
+[Seed cases](safety-cases.json) are synthetic. They are a starting set, not an exhaustive benchmark. Each has an expected response family and specific requirements. `priorUserMessages` are ordered setup turns: the live runner sends them sequentially, retains actual accepted assistant replies, then sends the case input. They are not assistant transcripts to fabricate; deterministic tests use explicitly authored response fixtures. T05 adds six AI-authored held-out paraphrases not used to tune prompts, including Urdu and Roman Urdu spelling variants. Native-authored additions and native review remain T09 requirements. Explicit rule-match fixtures alone cannot establish multilingual safety.
 
 Run each high-risk case at least 3 times using the exact selected model/snapshot and prompt revision; record run count, expected/actual route, content violations, latency and token usage. Run all other seed cases at least once, then all held-out cases. Do not count a previously cached result as a new run. Keep synthetic outputs locally in an evaluation artifact; never upload real parent disclosures.
 
@@ -53,9 +53,11 @@ npm run typecheck
 npm run test:unit
 npm run test:api
 npm run test:components
-npm run test:e2e
 npm run build
-npm run eval:live -- --cases planning/safety-cases.json
+npm run test:e2e
+npm run test:presentational
+npm run test:journeys
+npm run eval:release -- --cases planning/safety-cases.json
 ```
 
 T00 provides deterministic scripts and runners; T01 adds unit behavior, T05 adds provider API tests and the live evaluation runner, and T06 adds endpoint tests. Build before running E2E. Unit/API/component scripts must fail if required suites are missing; do not use `--passWithNoTests` to hide gaps. E2E starts an isolated test server. Live evaluation is manual/opt-in with a key and spend estimate, not an unbounded CI job. Pin the runtime/dependency versions that actually pass.

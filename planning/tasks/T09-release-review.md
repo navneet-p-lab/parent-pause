@@ -1,11 +1,13 @@
 # T09 — Review bilingual safety and complete evidence
 
-Status: To Do — not started; execution is blocked until the dependencies below are accepted and committed.
+Status: In Progress — T08 accepted at `17befd3`. Integrated evaluation preparation and technical review are implemented; live evaluation/model selection and actual human/manual gates remain pending. See [plan](../evidence/t09-release-plan.md), [evaluation readiness](../evidence/model-evaluation.md) and [release review](../evidence/release-review.md). A preparation commit does not complete this packet or unblock T10.
 
 - Dependencies: T08 plus live provider configuration
 - Suggested executor: Stronger reviewer + native Urdu/human reviewers
 - Rough effort: 60–120 minutes plus external review; planning estimate, not a deadline.
 - Writable ownership: `planning/evidence/model-evaluation.md, planning/evidence/release-review.md, safety-cases additions agreed with lead`
+
+Lead-approved preparation scope also includes `scripts/eval-release.ts`, the existing evaluation observation handoff, relevant API tests and npm command wiring; the frozen product/provider/safety interfaces remain unchanged.
 
 ## Task prompt
 

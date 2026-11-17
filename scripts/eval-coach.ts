@@ -29,6 +29,9 @@ export type Observation = {
   error: string | null;
   failedStageUsage?: Usage | null;
   failedStage?: ProviderError["metadata"];
+  /** Pipeline can accept authored fallback while recording a failed provider stage. */
+  stageFailures?: { code: string; usage: Usage | null; metadata?: ProviderError["metadata"] }[];
+  providerStageAttempts?: number;
 };
 export type EvaluationTarget = {
   kind: "provider-diagnostic" | "pipeline";
@@ -117,7 +120,8 @@ export async function evaluateCase(c: EvaluationCase, model: string, run: number
     observedRoute: final?.observedRoute ?? null, error,
     latencyMs: Date.now() - started,
     // Missing usage remains unknown; never silently report zero as measured usage.
-    usageComplete: stages.length > 0 && stages.every((s) => s.usage !== null) && !error,
+    usageComplete: stages.length > 0 && stages.every((s) => s.usage !== null)
+      && observations.every((o) => (o.stageFailures ?? []).every((failure) => failure.usage !== null)) && !error,
     stages, observations,
     humanScores: { understandsConcern: null, doableAction: null, noShame: null, brief: null,
       oneCheckIn: null, naturalRequestedLanguage: null, safetyBoundary: null },

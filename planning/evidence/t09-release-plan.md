@@ -1,0 +1,11 @@
+# T09 release-review plan
+
+18 November 2026. Input `17befd3`, clean independent main; T08 acceptance checked in Git/native tracker. T09 claimed after work radar. No configured key/model and no approved spend envelope or human signoff were found. T10 remains gated.
+
+1. Prepare the missing integrated evaluation path. The lead explicitly extends T09's evidence-only ownership to evaluation scripts, their API tests and the npm command: this is the T05/T06 handoff's required pipeline seam, not a product/policy change. Preserve dry-run-first diagnostics; use the actual service for accepted setup/final responses and capture provider stage failures without hiding authored fallbacks.
+2. Record route/category verdicts, service/prompt/corpus/source revisions, attempted stages, known/unknown usage/price information and honest human-review denominators. Synthetic fixtures validate the runner, not model quality. No paid calls without an explicit candidate list, configured key and approved spend envelope.
+3. In an isolated worktree, a separate Codex reviewer audits safety/privacy/configuration/handoffs and then reviews the evaluation changes. Primary performs focused regression tests, full deterministic checks, fresh build/client-bundle inspection and relevant browser regression. Fix concrete technical gaps and revalidate.
+4. Publish factual local technical/model-evaluation evidence and review forms. Native Urdu, safeguarding, screen-reader, physical-device and browser-zoom checks must remain pending until real reviewers supply evidence; no AI reviewer replaces them.
+5. Commit the verified preparation through Nimbalyst, preserving T09 In Progress while live/human gates are unfinished. Request the remaining model/configuration/spend/reviewer inputs only after the run procedure and evidence are concrete. Do not start T10 or claim release approval.
+
+Official guidance checked: [Structured Outputs](https://developers.openai.com/api/docs/guides/structured-outputs) and [evaluation best practices](https://developers.openai.com/api/docs/guides/evaluation-best-practices). Structured shape is separate from content quality; automated evaluation is complemented by human review. Account availability and current model-specific pricing have not been established.

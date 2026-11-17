@@ -64,9 +64,11 @@ T00 acceptance was reverified in the [bootstrap reassessment](planning/evidence/
 
 ## Provider evaluation
 
+`npm run eval:release` now prepares T09's **integrated service** evaluation and defaults to a no-network dry-run. It retains accepted setup replies, captures failed-stage usage alongside authored fallbacks, checks expected routes/categories and reports honest human-review denominators. Live execution still requires explicit candidates, a local server key, sufficient `--max-calls` and an owner-approved spend envelope. Optional supplied rate cards produce token-cost estimates, not invoices or a dollar cutoff. See [model-evaluation readiness](planning/evidence/model-evaluation.md) and [technical release review](planning/evidence/release-review.md). No live evaluation or final model/human release approval has occurred.
+
 `npm run eval:live` defaults to a no-network dry-run. `--models candidate-a,candidate-b` plans explicit candidate comparisons. Live diagnostics require `--live`, an explicit model list, server key and sufficient `--max-calls`; do not run paid evaluation without a spend envelope. Results default to ignored `evaluation-results/` JSONL files, with null human scores. No runtime model is selected.
 
-The current CLI is a direct-provider diagnostic. It cannot provide accepted setup replies for follow-up cases and reports those as `SETUP_NOT_ACCEPTED`. T09 must inject the integrated T06 pipeline through the exported evaluation target seam and complete live/native/human review. See the [T05 handoff](planning/contracts-t05-v1.md) for exact adapter/error interfaces and evaluation limits.
+The `eval:live` CLI remains a direct-provider diagnostic. It cannot provide accepted setup replies for follow-up cases and reports those as `SETUP_NOT_ACCEPTED`. T09's `eval:release` CLI connects the integrated T06 pipeline through that target seam; live/native/human review is still pending. See the [T05 handoff](planning/contracts-t05-v1.md) for exact adapter/error interfaces and evaluation limits.
 
 ## Service endpoint
 
