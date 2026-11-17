@@ -1,0 +1,12 @@
+# T06 service/API implementation plan
+
+Input `0b58067`; frozen `t01-v1` and T05 provider handoff. Clean `main` in the independent repository. Native board confirms T00–T05 accepted; radar shows no overlapping claim. Implement only T06; T07 follows acceptance.
+
+1. Add a server-only service that validates/clones requests, applies T04 policy, lazily creates one T05 session, generates/reviews only when permitted, and validates final correlation. Explicit emergency bypasses configuration/provider creation. Preserve known-risk authored fallback on every provider/configuration/timeout failure; no failed classifier/review can produce routine coaching.
+2. Add transport helpers for configured same-origin/content-type checks, incremental 64 KiB body bounds, fatal UTF-8, cancellation/deadline races and bounded instance-scoped 10/minute + 100/hour limits. Use one shared local bucket unless infrastructure provides an explicitly configured overwritten client-key header; never infer trusted identity from Host/forwarded headers. Saturated key storage fails closed.
+3. Wire a Node POST route with a total 20-second deadline including body reading, no-store application envelopes and safe 400/413/429/503 mappings. Add local/test-only fixture sessions and reject fixture configuration at production startup. Do not connect the page or add persistence.
+4. Add fake-provider integration regressions for normal/localized paths, prior risk/injection, unknown classification, unsafe/invalid candidates and review failures, known-risk outages, request bounds, origin/identity trust, limiter expiry/caps, cancellation and slow streams. Test the actual adapter behind orchestration with mocked transport where useful; no paid calls.
+5. Run self-review while a separate read-only reviewer checks isolated snapshots in `/private/tmp/parentpause-t06-review`. Fix findings with regressions, then run lint/typecheck/full tests/build and sequential shell/presentation browser checks. Verify production fixture startup rejection and built route with synthetic HTTP probes.
+6. Append factual evidence/log/handoff, move T06 to In Review and submit all session changes through the required commit widget. Check actual SHA/status, close the accepted card and name T07 as next. Preserve live/native/human safety gates.
+
+Primary Codex owns implementation/integration/configuration; a separate Codex reviewer has narrow read-only ownership in an isolated worktree. No model override. Parallel review is useful; dependency-gated packet implementation stays sequential.

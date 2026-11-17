@@ -1,6 +1,6 @@
 # T06 — Wire server policy and bounded endpoint
 
-Status: To Do — not started; execution is blocked until the dependencies below are accepted and committed.
+Status: In Review — service, bounded Node endpoint, local/test fixture sessions and production startup guard implemented. See [verification](../evidence/t06-service.md) and [T07 handoff](../contracts-t06-v1.md). Actual commit acceptance belongs to Git/native history; T07 follows acceptance. Live/native/human release gates remain pending.
 
 - Dependencies: T04 and T05
 - Suggested executor: Small coding model + lead safety integration review

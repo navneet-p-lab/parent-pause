@@ -9,7 +9,7 @@ import {
 import { findExplicitRisk, hasContextualResolutionClaim } from "./rules";
 import { authoredBoundary, authoredEscalation } from "./templates";
 
-export const SAFETY_POLICY_REVISION = "t04-v1";
+export const SAFETY_POLICY_REVISION = "t06-safety-v2";
 
 export type SafetyDecision =
   | { kind: "classify"; fallbackCategory?: EscalationCategory; reassessPriorRisk?: boolean }

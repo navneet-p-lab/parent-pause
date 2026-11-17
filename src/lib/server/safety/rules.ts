@@ -32,7 +32,7 @@ const rules: readonly Rule[] = [
   { id: "roman-imminent-intent", category: "emergency", phrase: /^main abhi khud ko nuqsan (?:pahunchana|pohanchana) (?:chahta|chahti) (?:hun|hoon)$/u },
   { id: "roman-breathing", category: "emergency", phrase: /^mera (?:bacha|bachcha|baby) saans? nah[iy]n? le (?:pa raha|raha)(?: hai)?$/u },
   { id: "roman-imminent-self-harm", category: "emergency", phrase: /^main abhi khud ko (?:marne|maarne) (?:ja raha|ja rahi) (?:hun|hoon)$/u },
-  { id: "en-abuse", category: "abuse", phrase: /^(?:my partner|someone) (?:hits|is abusing|is sexually abusing) (?:me|my child|my baby)$/u },
+  { id: "en-abuse", category: "abuse", phrase: /^(?:my partner|someone) (?:hits|is abusing|is sexually abusing) (?:me|(?:my|our) (?:child|baby))(?: and says not to tell anyone)?$/u },
   { id: "ur-abuse", category: "abuse", phrase: /^میرا ساتھی میرے بچے کو مارتا ہے$/u },
   { id: "roman-abuse", category: "abuse", phrase: /^mera (?:partner|shohar) mere (?:bache|bachay) ko marta hai$/u },
   { id: "en-self-harm", category: "self_harm", phrase: /^i (?:want to (?:hurt|kill) myself|am thinking (?:about|of) (?:hurting|killing) myself)$/u },
