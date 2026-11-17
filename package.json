@@ -19,12 +19,15 @@
     "test:api": "vitest run src/test/api",
     "test:components": "vitest run src/test/components",
     "test:e2e": "playwright test",
-    "test:presentational": "playwright test --config playwright.presentational.config.ts"
+    "test:presentational": "playwright test --config playwright.presentational.config.ts",
+    "eval:live": "node --conditions=react-server --import tsx scripts/eval-coach.ts"
   },
   "dependencies": {
     "next": "16.4.6",
+    "openai": "7.58.0",
     "react": "19.3.1",
     "react-dom": "19.3.1",
+    "server-only": "0.0.1",
     "zod": "4.6.7"
   },
   "devDependencies": {
@@ -40,6 +43,7 @@
     "eslint": "9.39.5",
     "eslint-config-next": "16.4.6",
     "jsdom": "27.4.0",
+    "tsx": "4.23.15",
     "typescript": "5.9.3",
     "vite": "8.3.8",
     "vitest": "5.1.0"

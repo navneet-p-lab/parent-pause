@@ -1,6 +1,6 @@
 # T05 — Implement model adapter and evaluation runner
 
-Status: To Do — not started; execution is blocked until the dependencies below are accepted and committed.
+Status: In Review — adapter, server configuration, coaching prompt and opt-in evaluation harness implemented. See [evidence](../evidence/t05-provider.md) and [interface handoff](../contracts-t05-v1.md). Actual commit acceptance belongs to Git/native history. Full-pipeline live evaluation and model selection remain T09.
 
 - Dependencies: T01; T04 prompt contracts
 - Suggested executor: Small coding model for adapter; lead for model decision
