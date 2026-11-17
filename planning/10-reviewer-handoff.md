@@ -1,0 +1,36 @@
+# Reviewer handoff and AI interaction record
+
+Snapshot: 18 November 2026, bootstrap reassessment. This is a reviewer-facing account of delivered work, decisions and evidence. Update it after each accepted packet. Git and the native board establish the actual commit/status outcome.
+
+## What can be reviewed now
+
+ParentPause has a runnable Next.js/TypeScript English shell, isolated npm dependency/configuration setup, accessible skip navigation, preview disclosure and general emergency notice. It does not collect messages or call a provider. Lint, typecheck, component and Chromium/WebKit shell tests, and production build are implemented.
+
+The [bilingual responsive prototype](mockups/parentpause.mockup.html), [product brief](01-product.md), [design](02-design.md), [architecture](03-architecture.md), [decisions](04-decisions.md), [safety policy](05-safety.md), [test strategy](06-testing.md) and 11 [packets](tasks/README.md) are prepared. The 35 [synthetic evaluation cases](safety-cases.json) have not been evaluated against a live model.
+
+Use [the root README](../README.md) to reproduce setup. The latest [reassessment evidence](evidence/session-reassessment.md) records this session's actual results; [initial bootstrap evidence](evidence/t00-bootstrap.md) and [adversarial follow-up](evidence/t00-review.md) document earlier work and failed probes.
+
+## Owner and AI interaction
+
+The earlier interaction summary comes from the existing project log and decision register. This workspace exposes only the current session, so this handoff does not claim verbatim recovery or independent verification of previous chat transcripts.
+
+| Stage | Owner direction | AI contribution and resulting decision |
+|---|---|---|
+| Product planning | Assessment demo; Next.js/OpenAI; ParentPause; English/Urdu plus Roman Urdu risk inputs; region-neutral help | Drafted scope, visual prototype, architecture, risk policy, evaluation cases and 11 bounded tasks; owner choices are separated from recommendations in the decision register |
+| Bootstrap | Implement the first packet | Created isolated project/tooling, minimal shell and smoke tests; used installed Node 22 without changing global defaults |
+| Adversarial follow-up | Retest, find gaps, fix and commit | Added generated route type validation, broader browser/reflow/network checks and ignore rules; reported unresolved development-tool advisory; prior commit is absent from current Git history |
+| Current reassessment | Reassess all work; write future-session direction and reviewer interaction record; put all 11 tasks on kanban; reopen bootstrap, finish gaps and commit all work | Verified actual source/Git/tracker state, recreated the missing local cards/dependencies, claimed T00, reconciled stale environment/status claims, added persistent agent entry point and directive, reran baseline and clean-install checks, prepared the complete initial commit |
+
+The full factual [AI-agent work log](07-agent-log.md) contains implementation decisions, rework and evidence links. AI drafted the Urdu copy and safety guidance. The owner supplied product choices. No native Urdu reader or safeguarding reviewer has approved them. This session used one primary Codex assistant; no subagents or independently assigned reviewer ran. Exact model variant is not exposed in current runtime context; older model labels are historical log claims.
+
+## Review standard and remaining work
+
+Bootstrap verification supports only the static shell. T01–T10 still need implementation or execution. No coaching endpoint, bilingual app, safety pipeline, live model evaluation, native-language approval, hosted CI run, published repository, deployment or walkthrough video is claimed. The [delivery storyboard](08-delivery.md) remains a plan.
+
+The full audit still reports 16 inherited development-tool findings from one unpatched picomatch advisory; runtime audit reports zero known findings at this snapshot. The bootstrap can be integrated with that disclosed limitation, while dependency remediation remains tracked in the review evidence. Passing automated accessibility tests does not replace screen-reader, physical-device or native-reader review.
+
+For each future packet, review its changed files against the acceptance criteria, reproduce relevant tests, inspect failure handling and confirm evidence matches the implementation. Safety-sensitive work requires the specified lead/human gates. A self-review is labeled as such; model self-grading cannot replace them.
+
+## Subsequent interaction record
+
+Append one row per accepted packet: date and packet, owner request/clarification, executor and input commit, actual changes, commands/results, reviewer and decision, unresolved limitation, output commit. Record a commit SHA only after it exists. Costs, token use, latency and time savings remain unmeasured until actual artifacts establish them.

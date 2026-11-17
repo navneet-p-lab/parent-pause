@@ -1,0 +1,43 @@
+name: ParentPause checks
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+env:
+  NEXT_TELEMETRY_DISABLED: "1"
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+      - name: Unit suite (required when introduced by T01)
+        if: hashFiles('src/lib/contracts.ts', 'src/test/unit/**/*.test.ts', 'src/test/unit/**/*.test.tsx') != ''
+        run: npm run test:unit
+      - name: API suite (required when introduced by T06)
+        if: hashFiles('src/app/api/coach/route.ts', 'src/test/api/**/*.test.ts', 'src/test/api/**/*.test.tsx') != ''
+        run: npm run test:api
+      - name: Report deferred bootstrap categories
+        run: |
+          if [ ! -d src/test/unit ]; then echo '::notice::Unit suite deferred to T01; test:unit fails until tests exist.'; fi
+          if [ ! -d src/test/api ]; then echo '::notice::API suite deferred to T06; test:api fails until tests exist.'; fi
+      - run: npm run test:components
+      - run: npm run build
+      - run: npx playwright install --with-deps --only-shell chromium webkit
+      - run: npm run test:e2e
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-evidence
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 7

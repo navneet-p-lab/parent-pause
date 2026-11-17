@@ -1,0 +1,37 @@
+[
+  {
+    "pair": "Body on paper",
+    "foreground": "#263b35",
+    "background": "#f7f6f2",
+    "ratio": 11.04,
+    "normal_text_AA": true
+  },
+  {
+    "pair": "Muted on paper",
+    "foreground": "#5c6c64",
+    "background": "#f7f6f2",
+    "ratio": 5.13,
+    "normal_text_AA": true
+  },
+  {
+    "pair": "Primary button",
+    "foreground": "#ffffff",
+    "background": "#2f5d50",
+    "ratio": 7.49,
+    "normal_text_AA": true
+  },
+  {
+    "pair": "Safety on warm background",
+    "foreground": "#843d2e",
+    "background": "#fff3ea",
+    "ratio": 7.17,
+    "normal_text_AA": true
+  },
+  {
+    "pair": "Check-in on sage",
+    "foreground": "#2f5d50",
+    "background": "#eaf0ea",
+    "ratio": 6.48,
+    "normal_text_AA": true
+  }
+]

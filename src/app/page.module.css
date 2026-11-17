@@ -1,0 +1,37 @@
+.page {
+  min-height: 100dvh;
+  background: #f7f6f2;
+  color: #263b35;
+  font: 1rem/1.6 system-ui, sans-serif;
+  padding-block-end: max(48px, env(safe-area-inset-bottom));
+}
+
+.header {
+  max-width: 960px;
+  margin-inline: auto;
+  padding: 24px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 24px;
+  color: #5c6c64;
+}
+
+.brand { font-size: 1.25rem; font-weight: 700; color: #2f5d50; }
+.main { max-width: 720px; margin: 48px auto 0; padding-inline: 24px; }
+.eyebrow { color: #2f5d50; font-weight: 600; }
+.main h1 { font-size: 2.25rem; line-height: 1.2; text-wrap: balance; }
+.main h2 { font-size: 1.25rem; line-height: 1.4; }
+.card { margin-block: 32px; padding: 24px; background: #fff; border: 1px solid #c7d4ca; border-radius: 16px; }
+.note { color: #5c6c64; }
+.safety { padding: 20px; border-radius: 12px; background: #eaf0ea; }
+.skipLink { position: absolute; inset-inline-start: 16px; top: 0; transform: translateY(-150%); background: #fff; padding: 12px; color: #263b35; z-index: 1; }
+.skipLink:focus { transform: translateY(0); }
+.page :focus-visible { outline: 3px solid #2f5d50; outline-offset: 4px; }
+
+@media (max-width: 639px) {
+  .header { padding-inline: 16px; }
+  .main { padding-inline: 16px; margin-block-start: 24px; }
+  .main h1 { font-size: 1.75rem; }
+  .card { padding: 20px; }
+}
