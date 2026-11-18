@@ -21,7 +21,7 @@ function sessionWith(...values: unknown[]) {
   values.forEach((v) => transport.mockResolvedValueOnce(v));
   return { session: createProviderSession(requestFixtures.en, { config, transport }), transport };
 }
-afterEach(() => vi.useRealTimers());
+afterEach(() => { vi.useRealTimers(); vi.unstubAllEnvs(); });
 
 describe("server configuration", () => {
   it.each([{}, { COACH_PROVIDER: "openai" }, { COACH_PROVIDER: "other" },
@@ -35,9 +35,13 @@ describe("server configuration", () => {
   it("allows fixtures only explicitly in test/development", () => {
     for (const NODE_ENV of ["test", "development"]) expect(readProviderConfig({ NODE_ENV, COACH_PROVIDER: "fixtures" })).toEqual({ mode: "fixtures" });
   });
-  it("requires explicit model and server key", () => {
+  it("accepts an explicit model override and requires a server key", () => {
     expect(readProviderConfig({ COACH_PROVIDER: "openai", OPENAI_API_KEY: " key ", OPENAI_MODEL: " model " })).toEqual({ mode: "openai", apiKey: "key", model: "model" });
     expect(() => createProviderSession(requestFixtures.en, { config: { mode: "fixtures" } })).toThrow(ConfigurationError);
+  });
+  it.each([undefined, "", "   "])("defaults to Terra when model is %j", (OPENAI_MODEL) => {
+    expect(readProviderConfig({ COACH_PROVIDER: "openai", OPENAI_API_KEY: "synthetic", OPENAI_MODEL }))
+      .toEqual({ mode: "openai", apiKey: "synthetic", model: "gpt-6.1-terra" });
   });
 });
 
@@ -107,7 +111,7 @@ describe("provider boundary", () => {
   });
   it.each([
     { response: { ...plan, locale: "ur" } },
-    { response: { ...plan, steps: ["one"] } },
+    { response: { ...plan, steps: [] } },
     { response: { ...plan, acknowledgment: "a".repeat(181) } },
     { response: responseFixtures.en.clarify },
     { response: { ...plan, steps: ["a ".repeat(60), "b ".repeat(60)] } },
@@ -154,6 +158,29 @@ describe("provider boundary", () => {
     const session = createProviderSession(requestFixtures.en, { config });
     await expect(session.classify()).rejects.toMatchObject({ code: "UPSTREAM", message: "UPSTREAM" });
     expect(fetch).toHaveBeenCalledTimes(1);
+  });
+  it.each(["development", "production"])("keeps upstream diagnostics bounded and private in %s", async (mode) => {
+    vi.stubEnv("NODE_ENV", mode);
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+    const fetch = vi.spyOn(globalThis, "fetch").mockImplementation(async () => Response.json({ error: {
+      message: "SECRET parent text and credential", type: "rate_limit_error", code: "rate_limit_exceeded",
+    } }, { status: 429, headers: { "x-request-id": "SECRET_HEADER" } }));
+    await expect(createProviderSession(requestFixtures.en, { config }).classify()).rejects.toMatchObject({ code: "UPSTREAM" });
+    expect(fetch).toHaveBeenCalledTimes(1);
+    if (mode === "development") expect(warn.mock.calls).toEqual([["[ParentPause provider failure]", {
+      operation: "classify", code: "UPSTREAM", status: 429, upstreamCode: "rate_limit_exceeded",
+    }]]);
+    else expect(warn).not.toHaveBeenCalled();
+    expect(JSON.stringify(warn.mock.calls)).not.toContain("SECRET");
+  });
+  it("omits arbitrary upstream codes from development diagnostics", async () => {
+    vi.stubEnv("NODE_ENV", "development");
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+    vi.spyOn(globalThis, "fetch").mockImplementation(async () => Response.json({ error: {
+      message: "SECRET", code: "SECRET_PARENT_TEXT",
+    } }, { status: 400 }));
+    await expect(createProviderSession(requestFixtures.en, { config }).classify()).rejects.toThrow("UPSTREAM");
+    expect(warn.mock.calls).toEqual([["[ParentPause provider failure]", { operation: "classify", code: "UPSTREAM", status: 400 }]]);
   });
   it("rejects calls out of order and concurrent calls", async () => {
     let finish!: (value: unknown) => void;

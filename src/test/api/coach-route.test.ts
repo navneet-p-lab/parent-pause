@@ -168,7 +168,7 @@ describe("coach service integration", () => {
     const response = await handler(request());
     expect((await response.json()).response).toEqual(authoredEscalation("en", "abuse"));
   });
-  it.each([null, { ...responseFixtures.en.plan, steps: ["one"] }, responseFixtures.ur.plan,
+  it.each([null, { ...responseFixtures.en.plan, steps: [] }, responseFixtures.ur.plan,
     responseFixtures.en.clarify, { ...responseFixtures.en.plan, checkIn: { kind: "question", text: "x".repeat(181) } },
   ])("rejects malformed/wrong-family/locale candidate before review", async (candidate) => {
     const { handler, session } = harness(fakeSession({ category: "routine" }, candidate));

@@ -21,13 +21,16 @@ export function LocalizedShell({ locale, onLocaleChange, children, demo = false 
       <a className={styles.skipLink} href={`#${mainId}`}>{copy.skipToMain}</a>
       <header className={styles.header}>
         <div className={styles.identity}>
-          <bdi className={styles.brand} dir="ltr">ParentPause</bdi>
-          <p>{copy.descriptor}</p>
+          <span className={styles.brandMark} aria-hidden="true"><span /><span /></span>
+          <div>
+            <bdi className={styles.brand} dir="ltr">ParentPause</bdi>
+            <p>{copy.descriptor}</p>
+          </div>
         </div>
         <LanguageSwitch locale={locale} onLocaleChange={onLocaleChange} label={copy.languageLabel} />
       </header>
       <main id={mainId} className={styles.main} tabIndex={-1} aria-label={copy.mainLabel}>
-        <p className={styles.preview}>{demo ? copy.demoNotice : copy.preview}</p>
+        {demo && <p className={styles.preview}>{copy.demoNotice}</p>}
         {children}
         <SafetyNotice locale={locale} />
         <footer className={styles.privacy}>

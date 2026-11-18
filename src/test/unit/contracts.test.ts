@@ -8,7 +8,7 @@ import {
 } from "@/lib/contracts";
 import { REQUEST_ID, requestFixtures, responseFixtures } from "@/test/fixtures/contracts";
 
-const responses: CoachResponse[] = Object.values(responseFixtures).flatMap((fixtures) => Object.values(fixtures));
+const responses: Exclude<CoachResponse, { kind: "paused" | "summary" }>[] = Object.values(responseFixtures).flatMap((fixtures) => Object.values(fixtures));
 const user: Turn = { role: "user", text: "A synthetic concern" };
 const assistant: Turn = { role: "assistant", response: responseFixtures.en.plan };
 const requestWith = (turns: unknown[]) => ({ ...requestFixtures.en, turns });
@@ -113,8 +113,8 @@ describe("response contract", () => {
     }
   });
 
-  it.each([0, 1, 2, 3, 4])("requires 2–3 plan steps (got %i)", (count) => {
-    expect(coachResponseSchema.safeParse({ ...responseFixtures.en.plan, steps: Array(count).fill("Try a small step.") }).success).toBe(count === 2 || count === 3);
+  it.each([0, 1, 2, 3, 4])("requires 1–3 plan steps (got %i)", (count) => {
+    expect(coachResponseSchema.safeParse({ ...responseFixtures.en.plan, steps: Array(count).fill("Try a small step.") }).success).toBe(count >= 1 && count <= 3);
   });
   it.each([0, 1, 2, 3, 4])("requires 1–3 escalation actions (got %i)", (count) => {
     expect(coachResponseSchema.safeParse({ ...responseFixtures.en.escalation, actions: Array(count).fill("Seek human help now.") }).success).toBe(count >= 1 && count <= 3);
@@ -220,7 +220,7 @@ describe("provider wire shapes and application validation", () => {
   });
 
   it.each(["routine", "unclear", "medical_legal", "emergency", "abuse", "self_harm"])("accepts classification %s", (category) => {
-    expect(providerClassificationWireSchema.parse({ category })).toEqual({ category });
+    expect(providerClassificationWireSchema.parse({ category, intent: "continue" })).toEqual({ category, intent: "continue" });
   });
   it.each([{ category: "safe" }, { category: "routine", confidence: 1 }, { category: null }, "routine"])("rejects malformed classification %j", (value) => {
     expect(providerClassificationWireSchema.safeParse(value).success).toBe(false);

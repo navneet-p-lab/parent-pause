@@ -8,9 +8,12 @@ export function CoachResponse({ response, labels }: CoachResponseProps) {
   const checkInId = useId();
   const heading = {
     plan: labels.planHeading,
+    summary: labels.summaryHeading,
     clarify: labels.clarificationHeading,
     boundary: labels.boundaryHeading,
     escalation: labels.escalationHeading,
+    pause_offer: labels.pauseOfferHeading,
+    paused: labels.pausedHeading,
   }[response.kind];
   const escalation = response.kind === "escalation";
 
@@ -26,12 +29,12 @@ export function CoachResponse({ response, labels }: CoachResponseProps) {
         {escalation && <span aria-hidden="true">⚠ </span>}
         {heading}
       </h2>
-      {response.kind === "plan" || response.kind === "clarify" ? (
+      {"acknowledgment" in response ? (
         <p className={styles.text}>{response.acknowledgment}</p>
       ) : (
         <p className={styles.text}>{response.message}</p>
       )}
-      {response.kind === "plan" && (
+      {(response.kind === "plan" || response.kind === "summary") && (
         <ol className={styles.actions}>
           {response.steps.map((step, index) => <li key={index}>{step}</li>)}
         </ol>
@@ -42,10 +45,10 @@ export function CoachResponse({ response, labels }: CoachResponseProps) {
           {response.actions.map((action, index) => <li key={index}>{action}</li>)}
         </ul>
       )}
-      <section role="group" aria-labelledby={checkInId} className={styles.checkIn}>
+      {"checkIn" in response && <section role="group" aria-labelledby={checkInId} className={styles.checkIn}>
         <h3 id={checkInId} className={styles.checkInHeading}>{labels.checkInHeading}</h3>
         <p className={styles.text}>{response.checkIn.text}</p>
-      </section>
+      </section>}
     </article>
   );
 }

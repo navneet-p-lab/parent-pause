@@ -50,7 +50,7 @@ describe("synthetic evaluation harness", () => {
   });
   it.each([
     { response: { ...responseFixtures.en.plan, locale: "ur" as const } },
-    { response: { ...responseFixtures.en.plan, steps: ["one"] } },
+    { response: { ...responseFixtures.en.plan, steps: [] } },
   ])("validates setup and final pipeline responses without aborting the batch", async ({ response }) => {
     for (const priorUserMessages of [[], ["Earlier concern"]]) {
       const evaluate = vi.fn().mockResolvedValue({ response, observedRoute: "plan", stages: [], error: null });

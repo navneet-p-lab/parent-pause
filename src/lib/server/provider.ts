@@ -12,7 +12,7 @@ import { classificationPrompt } from "./prompts/classify";
 import { coachingPrompt } from "./prompts/coach";
 import { reviewPrompt } from "./prompts/review";
 
-export const PROVIDER_REVISION = "t05-provider-v1";
+export const PROVIDER_REVISION = "t05-provider-v3";
 export const PROVIDER_LIMITS = { deadlineMs: 20_000, calls: 3, outputTokens: 1_200 } as const;
 export const providerJsonSchemas = {
   classify: z.toJSONSchema(providerClassificationWireSchema, { target: "draft-7" }),
@@ -91,14 +91,16 @@ export function createProviderSession(input: CoachRequest, options: {
   let calls = 0;
   let busy = false;
   let failed = false;
-  const order: Operation[] = ["classify", "generate", "review"];
+  let nextOperation: Operation | null = "classify";
 
-  async function call<T>(operation: Operation, prompt: { instructions: string; input: string }, parse: (value: unknown) => T): Promise<ProviderResult<T>> {
+  async function call<T>(operation: Operation, prompt: { instructions: string; input: string }, parse: (value: unknown) => T, authoredPause = false): Promise<ProviderResult<T>> {
     if (options.signal?.aborted) throw new ProviderError("CANCELLED");
     const remaining = deadline - Date.now();
     if (remaining <= 0) throw new ProviderError("TIMEOUT");
-    if (busy || failed || calls >= PROVIDER_LIMITS.calls || order[calls] !== operation) throw new ProviderError("CALL_BUDGET");
+    const reviewAuthoredPause = authoredPause && operation === "review" && nextOperation === "generate";
+    if (busy || failed || calls >= PROVIDER_LIMITS.calls || (nextOperation !== operation && !reviewAuthoredPause)) throw new ProviderError("CALL_BUDGET");
     calls++; // Failed and concurrent operations also consume the one allowed stage.
+    nextOperation = operation === "classify" ? "generate" : operation === "generate" ? "review" : null;
     busy = true;
     const started = Date.now();
     const controller = new AbortController();
@@ -135,6 +137,17 @@ export function createProviderSession(input: CoachRequest, options: {
     } catch (error) {
       failed = true;
       const failure = controller.signal.aborted ? controller.signal.reason : error;
+      if (process.env.NODE_ENV === "development") {
+        // Fixed, bounded metadata only. Never log SDK messages/headers or chat/output.
+        const status = failure instanceof OpenAI.APIError ? failure.status : undefined;
+        const code = failure instanceof OpenAI.APIError && ["rate_limit_exceeded", "insufficient_quota", "credit_balance_exhausted", "invalid_api_key", "model_not_found"].includes(failure.code ?? "")
+          ? failure.code : undefined;
+        console.warn("[ParentPause provider failure]", {
+          operation, code: failure instanceof ProviderError ? failure.code : "UPSTREAM",
+          ...(Number.isInteger(status) && status! >= 400 && status! <= 599 ? { status } : {}),
+          ...(code ? { upstreamCode: code } : {}),
+        });
+      }
       // Never propagate SDK/Zod errors, causes, headers, prompt text or raw output.
       throw new ProviderError(failure instanceof ProviderError ? failure.code : "UPSTREAM",
         failure instanceof ProviderError ? failure.usage : null,
@@ -147,7 +160,7 @@ export function createProviderSession(input: CoachRequest, options: {
 
   return {
     classify: () => call<Classification>("classify", classificationPrompt(request), (v) => classificationSchema.parse(v)),
-    generate: (kind: "plan" | "clarify") => call<CoachResponse>("generate", coachingPrompt(request, kind), (v) => {
+    generate: (kind: "plan" | "clarify" | "summary") => call<CoachResponse>("generate", coachingPrompt(request, kind), (v) => {
       const candidate = parseProviderResponse(v, request.locale);
       if (candidate.kind !== kind) throw new ProviderError("INVALID_OUTPUT");
       return candidate;
@@ -155,7 +168,7 @@ export function createProviderSession(input: CoachRequest, options: {
     review: (candidate: CoachResponse) => {
       const valid = coachResponseSchema.safeParse(candidate);
       if (!valid.success || valid.data.locale !== request.locale) return Promise.reject(new ProviderError("INVALID_INPUT"));
-      return call<Review>("review", reviewPrompt(request, valid.data), (v) => reviewSchema.parse(v));
+      return call<Review>("review", reviewPrompt(request, valid.data), (v) => reviewSchema.parse(v), valid.data.kind === "pause_offer" || valid.data.kind === "paused");
     },
   };
 }

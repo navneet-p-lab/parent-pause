@@ -101,3 +101,16 @@ export function authoredEscalation(locale: Locale, category: EscalationCategory)
 export function authoredBoundary(locale: Locale): Boundary {
   return coachResponseSchema.parse(boundaries[locale]) as Boundary;
 }
+
+/** Conversation control copy; pausing does not schedule updates or monitor a conversation. */
+export function authoredPause(locale: Locale, confirmed: boolean): Extract<CoachResponse, { kind: "pause_offer" | "paused" }> {
+  const response = confirmed
+    ? { kind: "paused", locale, message: locale === "en"
+      ? "We can leave it here for now. You’re welcome to share an update in this conversation whenever you like."
+      : "فی الحال یہیں ٹھہرتے ہیں۔ جب چاہیں، اسی گفتگو میں نئی بات بتا سکتے ہیں۔" }
+    : { kind: "pause_offer", locale, acknowledgment: locale === "en"
+      ? "I’m glad this feels helpful. There’s no pressure to keep going."
+      : "خوشی ہے کہ یہ بات مددگار لگی۔ گفتگو جاری رکھنا ضروری نہیں۔",
+      checkIn: { kind: "question", text: locale === "en" ? "Would you like to pause here?" : "کیا آپ یہیں وقفہ لینا چاہیں گے؟" } };
+  return coachResponseSchema.parse(response) as Extract<CoachResponse, { kind: "pause_offer" | "paused" }>;
+}

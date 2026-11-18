@@ -2,19 +2,27 @@
   display: grid;
   gap: var(--space-6);
   min-inline-size: 0;
+  direction: ltr;
 }
 
 .parent {
   min-inline-size: 0;
   padding: var(--space-4);
-  border-inline-start: var(--space-1) solid var(--color-action);
+  inline-size: fit-content;
+  max-inline-size: 76%;
+  margin-left: auto;
+  margin-right: 0;
+  border: 1px solid #d3e2d9;
+  border-radius: 20px 5px 20px 20px;
+  background: #e5eee7;
   color: var(--color-text);
   text-align: start;
 }
 
 .role {
   margin-block: 0 var(--space-2);
-  font-size: 1em;
+  font-size: .8125em;
+  font-weight: 600;
   color: var(--color-muted);
 }
 
@@ -41,6 +49,61 @@
 
 .error {
   color: var(--color-crisis-text);
+}
+
+.placeholder {
+  margin-block: var(--space-4);
+  padding: var(--space-6);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-card);
+  background: var(--color-surface);
+  inline-size: 88%;
+  margin-right: auto;
+  margin-left: 0;
+}
+
+.loadingHint {
+  min-block-size: 3em;
+  margin-block: var(--space-2) var(--space-4);
+}
+
+.skeleton {
+  display: grid;
+  gap: var(--space-3);
+  animation: breathe 1.8s ease-in-out infinite alternate;
+}
+
+.skeleton span {
+  display: block;
+  block-size: 0.75em;
+  inline-size: 100%;
+  border-radius: var(--radius-card);
+  background: var(--color-border);
+}
+
+.skeleton > span:first-child { inline-size: 82%; }
+.skeleton > span:nth-child(3) { inline-size: 68%; }
+
+.skeletonCheckIn {
+  display: grid;
+  gap: var(--space-3);
+  margin-block-start: var(--space-3);
+  padding: var(--space-4);
+  border-radius: var(--radius-card);
+  background: var(--color-support);
+}
+
+.skeletonCheckIn > span:last-child { inline-size: 65%; }
+
+@keyframes breathe { from { opacity: 0.45; } to { opacity: 0.9; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton { animation: none; }
+}
+
+@media (max-width:639px) {
+  .parent { max-inline-size: 88%; }
+  .placeholder { inline-size: 94%; padding: var(--space-4); }
 }
 
 .visuallyHidden {

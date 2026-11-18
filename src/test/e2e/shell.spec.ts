@@ -30,7 +30,8 @@ for (const width of [320, 390, 768, 1440]) {
     await expect(page.getByRole("link", { name: "Skip to main content" })).toBeFocused();
     await page.keyboard.press("Enter");
     await expect(page.getByRole("main")).toBeFocused();
-    await expect(page.getByText(/Assessment demo/)).toBeVisible();
+    await expect(page.getByText(/Assessment demo/)).toHaveCount(0);
+    await expect(page.getByText(/A few words are enough/)).toBeVisible();
     expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     expect(failures).toEqual([]);

@@ -42,10 +42,11 @@ describe("composer and conversation lifecycle", () => {
     fireEvent.keyDown(textbox(), { key: "Enter", metaKey: true }); await waitFor(() => expect(client).toHaveBeenCalledTimes(1));
     await waitFor(() => expect(textbox()).toHaveValue("")); expect(textbox()).toHaveFocus();
   });
-  it("keeps drafts while loading/error, freezes editing and retries the parent only once", async () => {
+  it("echoes submitted text immediately, clears the composer and restores draft on error", async () => {
     const { client, pending } = deferred(); render(<CoachShell client={client} />);
     fireEvent.change(textbox(), { target: { value: "Bedtime" } }); fireEvent.click(send()); fireEvent.click(send());
-    expect(client).toHaveBeenCalledTimes(1); expect(textbox()).toHaveValue("Bedtime"); expect(textbox()).toHaveAttribute("readonly");
+    expect(client).toHaveBeenCalledTimes(1); expect(textbox()).toHaveValue(""); expect(textbox()).toHaveAttribute("readonly");
+    expect(screen.getByText("Bedtime")).toBeVisible();
     await act(async () => pending[0].reject(new CoachClientError({ requestId: null, code: "UNAVAILABLE", retryable: true })));
     expect(textbox()).toHaveValue("Bedtime"); expect(textbox()).not.toHaveAttribute("readonly");
     fireEvent.click(screen.getByRole("button", { name: en.retry }));
@@ -96,7 +97,7 @@ describe("composer and conversation lifecycle", () => {
       if (settle === "resolve") pending[0].resolve({ requestId: client.mock.calls[0][0].requestId, response: responseFixtures.en.plan });
       else pending[0].reject(new Error("STALE_SECRET"));
     });
-    expect(send()).toBeDisabled(); expect(textbox()).toHaveValue("New concern"); expect(screen.queryAllByRole("article")).toHaveLength(0);
+    expect(send()).toBeDisabled(); expect(textbox()).toHaveValue(""); expect(screen.getByText("New concern")).toBeVisible(); expect(screen.queryAllByRole("article")).toHaveLength(0);
     await act(async () => pending[1].resolve({ requestId: client.mock.calls[1][0].requestId, response: responseFixtures.en.plan }));
     expect(textbox()).toHaveValue(""); expect(screen.getByText("New concern")).toBeVisible(); expect(screen.queryByText("Old concern")).not.toBeInTheDocument();
   });
@@ -110,7 +111,7 @@ describe("composer and conversation lifecycle", () => {
     await screen.findByText(responseFixtures.ur.plan.acknowledgment);
     expect(screen.getAllByRole("article")[1]).toHaveAttribute("dir", "rtl"); expect(client.mock.calls[1][0].locale).toBe("ur");
   });
-  it("shows context limit after eight exchanges and resets on remount without storage", async () => {
+  it("shows context limit after eight exchanges and preserves it on remount", async () => {
     const client = immediate(); const { unmount } = render(<CoachShell client={client} />);
     for (let n = 0; n < 8; n++) {
       fireEvent.change(textbox(), { target: { value: `Concern ${n}` } }); fireEvent.click(send());
@@ -119,6 +120,6 @@ describe("composer and conversation lifecycle", () => {
     expect(client).toHaveBeenCalledTimes(8); expect(client.mock.calls[7][0].turns).toHaveLength(15);
     expect(screen.getByText(en.limit)).toBeVisible(); expect(send()).toBeDisabled();
     expect(screen.getByRole("complementary", { name: en.emergencyLabel })).toBeVisible(); unmount(); render(<CoachShell client={client} />);
-    expect(textbox()).toHaveValue(""); expect(screen.queryAllByRole("article")).toHaveLength(0); expect(send()).toBeEnabled();
+    expect(textbox()).toHaveValue(""); expect(screen.queryAllByRole("article")).toHaveLength(8); expect(send()).toBeDisabled();
   });
 });

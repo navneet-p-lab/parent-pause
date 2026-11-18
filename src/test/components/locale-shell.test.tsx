@@ -69,7 +69,7 @@ test("offers keyboard navigation, a translated skip target and persistent disclo
   await user.keyboard("{Enter}");
   expect(urButton).toHaveFocus();
   expect(screen.getByRole("link", { name: ur.skipToMain })).toHaveAttribute("href", `#${main.id}`);
-  expect(screen.getByText(ur.preview)).toBeVisible();
+  expect(screen.queryByText(ur.preview)).toBeNull();
   expect(screen.getByText(ur.privacy)).toBeVisible();
   expect(screen.getByText("OpenAI")).toHaveAttribute("dir", "ltr");
   expect(screen.getByText("ParentPause")).toHaveAttribute("dir", "ltr");

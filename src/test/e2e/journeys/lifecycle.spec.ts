@@ -184,20 +184,21 @@ test("language change cancels work, preserves the draft and original response di
   await expect(page.getByRole("group", { name: ur.response.user, exact: true })).toHaveCount(2);
 });
 
-test("reload discards accepted turns, draft and locale without writing chat storage", async ({ page, context }) => {
+test("reload restores accepted turns, draft and locale from device storage", async ({ page, context }) => {
   await open(page);
   await send(page, "A synthetic bedtime concern.");
   await expect(page.getByRole("article")).toHaveCount(1);
   await page.getByRole("button", { name: "اردو", exact: true }).click();
   await textarea(page).fill("غیر ارسال شدہ عبارت");
-  expect(await page.evaluate(() => ({ local: localStorage.length, session: sessionStorage.length }))).toEqual({ local: 0, session: 0 });
+  expect(await page.evaluate(() => ({ local: localStorage.length, session: sessionStorage.length }))).toEqual({ local: 1, session: 0 });
   expect(await context.cookies()).toEqual([]);
   await page.reload();
-  await expect(page.locator("html")).toHaveAttribute("lang", "en");
-  await expect(textarea(page)).toHaveValue("");
-  await expect(page.getByRole("article")).toHaveCount(0);
-  await expect(page.getByRole("button", { name: en.clear, exact: true })).toHaveCount(0);
-  expect(await page.evaluate(() => ({ local: localStorage.length, session: sessionStorage.length }))).toEqual({ local: 0, session: 0 });
+  await expect(page.locator("html")).toHaveAttribute("lang", "ur");
+  await expect(textarea(page)).toHaveValue("غیر ارسال شدہ عبارت");
+  await expect(page.getByRole("article")).toHaveCount(1);
+  await expect(page.getByRole("article")).toHaveAttribute("lang", "en");
+  await expect(page.getByRole("button", { name: ur.clear, exact: true })).toBeVisible();
+  expect(await page.evaluate(() => ({ local: localStorage.length, session: sessionStorage.length }))).toEqual({ local: 1, session: 0 });
 });
 
 test("eight exchanges retain all history and require explicit new conversation", async ({ page }) => {

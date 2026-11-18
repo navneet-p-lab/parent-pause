@@ -1,10 +1,15 @@
 # Architecture and contracts
 
+Latest owner amendment, 18 November: mixed uncertainty/thanks plus a recap request must receive a concise summary of prior advice rather than repeat a medical/legal boundary or close early. Added reviewed question-free summaries and a localized “Summarize so far” control. Follow-up plans may contain one useful step (one to three total), with generation/review instructions to adapt advice, accept unknown answers and avoid repeated suggestions/questions. Urgent-risk precedence, independent review, Terra and device-local history remain. See [conversation-understanding evidence](evidence/conversation-understanding-2026-11-18.md). Earlier exactly-one-question and two-to-three-step requirements are superseded for these response shapes.
+
+
+Latest owner correction,18November: implement a History tab for older conversations; owner explicitly selected **Keep on this device** after clarification, authorizing browser localStorage persistence across reload/reopen with no database/account. This supersedes earlier page-memory/no-browser-storage requirements. New conversation archives current context/draft; opening history restores it, deletion is confirmed, and clear-all removes saved/current chats. Provider/safety routing and release gates remain unchanged. See [history evidence](evidence/conversation-history-2026-11-18.md).
+
 ## Application boundary
 
 Independent Next.js App Router app, TypeScript strict mode, React, CSS Modules with shared CSS tokens, Zod validation, official OpenAI server SDK. Node runtime, not Edge. Use npm with a committed lockfile for reviewer familiarity. Pin supported compatible versions and Node 22.12+ during bootstrap; do not silently use the parent SongRise workspace or its Bun lockfile. A local runtime upgrade is an implementation prerequisite, not something performed by this plan.
 
-Use one route (`POST /api/coach`) and one main page. Client state holds the conversation for this tab's current page lifetime. No localStorage, sessionStorage, cookies containing messages, provider conversations API, retrieval, queue, agent framework or database. No token streaming: validate the complete output before displaying it.
+Use one route (`POST /api/coach`) and one main page. Client state holds the active and older conversations, persisted with drafts in browser localStorage on this device. No accounts, server conversation store, sessionStorage, cookies containing messages, provider conversations API, retrieval, queue, agent framework or database. No token streaming: validate the complete output before displaying it.
 
 ```mermaid
 flowchart TD
@@ -98,7 +103,7 @@ type Failure = { requestId: string | null;
 
 Fallback errors are not a made-up coach turn. UI translates the error code and retains the draft. When risk is already known, a provider failure must still return the appropriate authored escalation, not just a retry button.
 
-Enforce 2,000 Unicode code points per user turn, 15 transcript entries (8 parent turns, 7 coach turns), and a 64 KiB body limit before unrestricted JSON parsing. Count Unicode code points consistently (`Array.from(text).length`), not JavaScript UTF-16 units. No silent history truncation: after 8 exchanges, display “This short conversation has reached its limit. Start a new conversation to continue.” New conversation explicitly clears context; persistent safety guidance remains. This bounds cost without quietly losing earlier risk disclosures.
+Enforce 2,000 Unicode code points per user turn, 15 transcript entries (8 parent turns, 7 coach turns), and a 64 KiB body limit before unrestricted JSON parsing. Count Unicode code points consistently (`Array.from(text).length`), not JavaScript UTF-16 units. No silent history truncation: after 8 exchanges, display “This short conversation has reached its limit. Start a new conversation to continue.” New conversation archives the current context and draft, then starts empty; reopening an archive restores its full context; persistent safety guidance remains. This bounds cost without quietly losing earlier risk disclosures.
 
 Plan acknowledgment <=180 code points, each of 2–3 steps <=180, question <=180. Target <=120 English words; Urdu uses those field bounds and a human brevity/readability rubric. Clarification has no steps. Boundary message <=240, alternative <=240, question <=180. Escalation message <=240, 1–3 actions <=240 each, question <=180; target <=100 English words. Fail invalid content rather than cutting off important safety language.
 
@@ -119,7 +124,7 @@ Shared total deadline 20 seconds; cap each response's output tokens and disable 
 - Server-only API key, never `NEXT_PUBLIC_*`; no client SDK. Missing configuration returns a safe error and logs only an error code.
 - Same-origin browser endpoint; validate configured Origin for browser requests, content type and bounded body. Origin checking is not authentication or a complete abuse defense.
 - `Cache-Control: no-store` on API responses. No prompt/response bodies in logs, analytics, crash payloads or URLs. Log only request ID, duration, result code and token counts.
-- UI copy: “This page keeps your chat only until you reload or clear it. Messages are sent to OpenAI to make a reply. Avoid names and identifying details.” Privacy detail: provider retention policies may apply; `store:false` is not a zero-retention promise. [OpenAI data controls](https://developers.openai.com/api/docs/guides/your-data).
+- UI copy: “Chats and drafts are saved in this browser on this device. Clear saved conversations in History to remove them. Avoid names and identifying details.” Privacy detail: provider retention policies may apply; `store:false` is not a zero-retention promise. [OpenAI data controls](https://developers.openai.com/api/docs/guides/your-data).
 - Assessment defaults: one request at a time per tab; bounded in-memory limiter per instance (10 requests/minute, 100/hour per validated deployment-derived client key); operator provider spend monitoring. Document resets and bypass limits. If deployed publicly across instances, gateway/distributed limiting and an enforceable budget cutoff become release requirements.
 - Test fixture provider is server-side and only allowed for local/test use. Live deployment must fail startup if configured for fixtures. Label local fixture UI “Demo responses — no AI call.”
 

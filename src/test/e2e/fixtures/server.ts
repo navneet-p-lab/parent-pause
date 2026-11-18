@@ -6,6 +6,7 @@ import { createCoachHandler } from "../../../lib/server/coach-handler";
 import { createCoachService, type SessionFactory } from "../../../lib/server/coach-service";
 import { createInstanceLimiter } from "../../../lib/server/request-limits";
 import { responseFixtures } from "../../fixtures/contracts";
+import { summaryFixtures } from "../../fixtures/summary";
 
 const port = 3212;
 const origin = `http://127.0.0.1:${port}`;
@@ -19,7 +20,7 @@ await app.prepare();
 const nextHandler = app.getRequestHandler();
 const limiter = createInstanceLimiter();
 const attempts = new Map<string, number>();
-const scenarios = new Set(["plan", "retry-once", "slow", "timeout", "invalid", "unsafe", "boundary", "classify-abuse", "classify-self-harm", "classify-invalid", "review-outage"]);
+const scenarios = new Set(["plan", "summary-flow", "pause-flow", "medical-thanks", "retry-once", "slow", "timeout", "invalid", "unsafe", "boundary", "classify-abuse", "classify-self-harm", "classify-invalid", "review-outage"]);
 let ready = false;
 
 const server = createServer(async (incoming, outgoing) => {
@@ -46,10 +47,20 @@ const server = createServer(async (incoming, outgoing) => {
         attempts.set(key, attempt + 1);
         if (attempt === 0) throw new Error("SYNTHETIC_PRIVATE_PROVIDER_ERROR");
       }
+      if (scenario === "pause-flow") {
+        const latest = request.turns.at(-1);
+        const previous = request.turns.at(-2);
+        const text = latest?.role === "user" ? latest.text : "";
+        return { value: { category: "routine", intent: text === "Maybe I would like a break." ? "offer_pause" : text === "Thanks, that helped." ? "close"
+          : previous?.role === "assistant" && previous.response.kind === "pause_offer" && /^(Yes|جی ہاں)/u.test(text) ? "confirm_pause" : "continue" } };
+      }
+      if (scenario === "medical-thanks") return { value: { category: "medical_legal", intent: "continue" } };
+      if (scenario === "summary-flow") return { value: { category: request.turns.length === 3 ? "medical_legal" : "routine", intent: "continue" } };
       return { value: { category: scenario === "boundary" ? "medical_legal"
         : scenario === "classify-abuse" ? "abuse" : scenario === "classify-self-harm" ? "self_harm" : "routine" } };
     },
-    async generate() {
+    async generate(kind) {
+      if (scenario === "summary-flow" && kind === "summary") return { value: summaryFixtures[request.locale] };
       if (scenario === "invalid") return { value: { kind: "plan", locale: request.locale, acknowledgment: "MALFORMED_CANDIDATE_MARKER" } };
       if (scenario === "slow") await new Promise((resolve) => setTimeout(resolve, 1500));
       const plan = responseFixtures[request.locale].plan;

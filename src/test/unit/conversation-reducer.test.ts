@@ -11,7 +11,8 @@ describe("memory-only conversation reducer", () => {
     expect(reduce(state, { type: "start", requestId: REQUEST_ID }).pending?.turns[0]).toEqual({ role: "user", text: "  اردو\u200c  " });
   });
   it("keeps accepted history separate, freezes draft while pending and rejects duplicate sends", () => {
-    const state = pending(); expect(state.turns).toEqual([]); expect(state.draft).toBe("Bedtime is hard.");
+    const state = pending(); expect(state.turns).toEqual([]); expect(state.draft).toBe("");
+    expect(state.pending?.turns.at(-1)).toEqual({ role: "user", text: "Bedtime is hard." });
     expect(reduce(state, { type: "start", requestId: crypto.randomUUID() })).toBe(state);
     expect(reduce(state, { type: "draft", text: "lost" })).toBe(state);
   });
@@ -34,7 +35,7 @@ describe("memory-only conversation reducer", () => {
     const state = pending();
     for (const value of [{ requestId: REQUEST_ID, response: responseFixtures.ur.plan }, { requestId: crypto.randomUUID(), response: responseFixtures.en.plan }]) {
       const failed = reduce(state, { type: "success", requestId: REQUEST_ID, value });
-      expect(failed.turns).toEqual([]); expect(failed.failure?.code).toBe("UNAVAILABLE"); expect(failed.draft).toBe(state.draft);
+      expect(failed.turns).toEqual([]); expect(failed.failure?.code).toBe("UNAVAILABLE"); expect(failed.draft).toBe("Bedtime is hard.");
     }
   });
   it("retains historical locales and stops after eight exchanges without truncation", () => {
@@ -50,5 +51,42 @@ describe("memory-only conversation reducer", () => {
     expect(state.turns[3]).toMatchObject({ response: { locale: "ur" } }); expect(state.draft).toBe("");
     expect(reduce(state, { type: "start", requestId: crypto.randomUUID() })).toBe(state);
     expect(initialConversation()).toMatchObject({ draft: "", turns: [], locale: "en" });
+  });
+  it("archives exact context and draft, then swaps conversations without mixing histories", () => {
+    let state = reduce(pending(), { type: "success", requestId: REQUEST_ID, value: { requestId: REQUEST_ID, response: responseFixtures.en.escalation } });
+    state = reduce(state, { type: "draft", text: "  An unsent update  " });
+    const turns = state.turns;
+    state = reduce(state, { type: "clear", eventId: "first" });
+    expect(state.turns).toEqual([]);
+    expect(state.history).toEqual([{ id: "first", turns, draft: "  An unsent update  " }]);
+    state = reduce(state, { type: "draft", text: "A separate concern" });
+    state = reduce(state, { type: "open", id: "first", eventId: "second" });
+    expect(state.turns).toEqual(turns);
+    expect(state.draft).toBe("  An unsent update  ");
+    expect(state.history).toEqual([{ id: "second", turns: [], draft: "A separate concern" }]);
+    state = reduce(state, { type: "start", requestId: crypto.randomUUID() });
+    expect(state.pending?.turns.slice(0, -1)).toEqual(turns);
+    expect(state.pending?.turns.at(-1)).toEqual({ role: "user", text: "  An unsent update  " });
+  });
+  it("restores pending text as a draft when archiving and ignores the old request", () => {
+    const state = reduce(pending(), { type: "clear", eventId: "first" });
+    expect(state.history).toEqual([{ id: "first", turns: [], draft: "Bedtime is hard." }]);
+    const restored = reduce(state, { type: "open", id: "first", eventId: "second" });
+    expect(restored.pending).toBeNull(); expect(restored.draft).toBe("Bedtime is hard.");
+    expect(reduce(restored, { type: "success", requestId: REQUEST_ID, value: { requestId: REQUEST_ID, response: responseFixtures.en.plan } })).toBe(restored);
+  });
+  it("does not archive empty conversations or duplicate the selected one and deletes only the chosen archive", () => {
+    let state = reduce(initialConversation(), { type: "clear", eventId: "empty" });
+    expect(state.history).toEqual([]);
+    for (const id of ["one", "two"]) {
+      state = reduce(state, { type: "draft", text: id });
+      state = reduce(state, { type: "clear", eventId: id });
+    }
+    expect(state.history.map((item) => item.id)).toEqual(["two", "one"]);
+    expect(reduce(state, { type: "open", id: "absent", eventId: "unused" })).toBe(state);
+    state = reduce(state, { type: "delete-history", id: "two" });
+    expect(state.history.map((item) => item.id)).toEqual(["one"]);
+    state = reduce(state, { type: "open", id: "one", eventId: "unused" });
+    expect(state.history).toEqual([]); expect(state.draft).toBe("one");
   });
 });

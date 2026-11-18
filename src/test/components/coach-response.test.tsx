@@ -13,9 +13,11 @@ afterEach(cleanup);
 // Renderer-only labels: T02 owns the actual dictionaries and can run in parallel.
 const labels: Record<Locale, ResponseLabels> = {
   en: {
-    user: "You", coach: "ParentPause coach", planHeading: "A small plan",
+    user: "You", coach: "ParentPause coach", planHeading: "A small plan", summaryHeading: "Your plan so far",
     clarificationHeading: "A little more context", boundaryHeading: "Professional support",
     escalationHeading: "Get support now", checkInHeading: "Check-in", loading: "Preparing a reply…",
+    pauseOfferHeading: "Breathing room", pausedHeading: "Paused",
+    loadingHints: ["Thinking…", "Considering…", "Preparing…"],
     errors: {
       INVALID_INPUT: "Check your message.", PAYLOAD_TOO_LARGE: "Your message is too long.",
       RATE_LIMITED: "Please wait before trying again.", UNAVAILABLE: "A reply is unavailable.",
@@ -23,9 +25,11 @@ const labels: Record<Locale, ResponseLabels> = {
     },
   },
   ur: {
-    user: "آپ", coach: "پرینٹ پاز رہنما", planHeading: "ایک چھوٹا منصوبہ",
+    user: "آپ", coach: "پرینٹ پاز رہنما", planHeading: "ایک چھوٹا منصوبہ", summaryHeading: "اب تک کا منصوبہ",
     clarificationHeading: "تھوڑی مزید وضاحت", boundaryHeading: "ماہرانہ مدد",
     escalationHeading: "ابھی مدد حاصل کریں", checkInHeading: "ایک سوال", loading: "جواب تیار ہو رہا ہے۔",
+    pauseOfferHeading: "ذرا ٹھہریں", pausedHeading: "وقفہ",
+    loadingHints: ["سوچ رہے ہیں…", "غور ہو رہا ہے…", "تیار ہو رہا ہے…"],
     errors: {
       INVALID_INPUT: "اپنا پیغام دیکھیں۔", PAYLOAD_TOO_LARGE: "پیغام بہت طویل ہے۔",
       RATE_LIMITED: "دوبارہ کوشش سے پہلے انتظار کریں۔", UNAVAILABLE: "جواب دستیاب نہیں۔",
@@ -36,9 +40,12 @@ const labels: Record<Locale, ResponseLabels> = {
 
 const headingFor = (response: Response) => ({
   plan: labels[response.locale].planHeading,
+  summary: labels[response.locale].summaryHeading,
   clarify: labels[response.locale].clarificationHeading,
   boundary: labels[response.locale].boundaryHeading,
   escalation: labels[response.locale].escalationHeading,
+  pause_offer: labels[response.locale].pauseOfferHeading,
+  paused: labels[response.locale].pausedHeading,
 })[response.kind];
 
 describe.each(["en", "ur"] as const)("%s response cards", (locale) => {

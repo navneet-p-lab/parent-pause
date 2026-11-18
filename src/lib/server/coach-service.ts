@@ -13,7 +13,7 @@ export const SERVICE_REVISION = "t06-service-v1";
 /** Values remain unknown here: injected sessions cannot bypass safety validation. */
 export type CoachSession = {
   classify: () => Promise<{ value: unknown }>;
-  generate: (kind: "plan" | "clarify") => Promise<{ value: unknown }>;
+  generate: (kind: "plan" | "clarify" | "summary") => Promise<{ value: unknown }>;
   review: (candidate: CoachResponse) => Promise<{ value: unknown }>;
 };
 export type SessionFactory = (request: CoachRequest, signal: AbortSignal) => CoachSession;
@@ -64,8 +64,12 @@ export function createCoachService(sessionFactory: SessionFactory = defaultSessi
     const request = parsed.data;
     const deadline = requestDeadline(options.signal);
     const initial = beforeClassification(request);
+    let stage: "classify" | "generate" | "review" = "classify";
+    const report = (reason: "POLICY_UNAVAILABLE" | "INVALID_CANDIDATE") => {
+      if (process.env.NODE_ENV === "development") console.warn("[ParentPause service failure]", { stage, reason });
+    };
     const finish = (result: SafetyDecision): Success | Failure => {
-      if (result.kind !== "respond") return failure("UNAVAILABLE", request.requestId);
+      if (result.kind !== "respond") { report("POLICY_UNAVAILABLE"); return failure("UNAVAILABLE", request.requestId); }
       const envelope = successForRequestSchema(request).safeParse({ requestId: request.requestId, response: result.response });
       return envelope.success ? envelope.data : failure("UNAVAILABLE", request.requestId);
     };
@@ -77,12 +81,19 @@ export function createCoachService(sessionFactory: SessionFactory = defaultSessi
       const session = sessionFactory(request, deadline.signal);
       const classified = await withSignal(() => session.classify(), deadline.signal);
       const decision = afterClassification(request, classified.value);
-      if (decision.kind !== "generate") return finish(decision);
-      const generated = await withSignal(() => session.generate(decision.responseKind), deadline.signal);
-      const candidate = coachResponseSchema.safeParse(generated.value);
-      if (!candidate.success || candidate.data.locale !== request.locale || candidate.data.kind !== decision.responseKind) return fallback();
-      const reviewed = await withSignal(() => session.review(candidate.data), deadline.signal);
-      return finish(afterReview(request, classified.value, candidate.data, reviewed.value));
+      if (decision.kind !== "generate" && decision.kind !== "review") return finish(decision);
+      let candidate: CoachResponse;
+      if (decision.kind === "review") candidate = decision.response;
+      else {
+        stage = "generate";
+        const generated = await withSignal(() => session.generate(decision.responseKind), deadline.signal);
+        const parsedCandidate = coachResponseSchema.safeParse(generated.value);
+        if (!parsedCandidate.success || parsedCandidate.data.locale !== request.locale || parsedCandidate.data.kind !== decision.responseKind) { report("INVALID_CANDIDATE"); return fallback(); }
+        candidate = parsedCandidate.data;
+      }
+      stage = "review";
+      const reviewed = await withSignal(() => session.review(candidate), deadline.signal);
+      return finish(afterReview(request, classified.value, candidate, reviewed.value));
     } catch (error) {
       // Known-risk fallback outranks configuration, timeout and provider failures.
       if (initial.kind === "classify" && initial.fallbackCategory) return fallback();

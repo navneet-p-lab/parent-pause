@@ -1,40 +1,19 @@
-# Repository and two-minute submission plan
+# Repository and video delivery plan
 
-This document is the delivery plan. T00 now supplies a static bootstrap app; the full coaching app, published GitHub repository and video remain later execution deliverables. See the [current reviewer handoff](10-reviewer-handoff.md).
+Owner authorized committing and pushing all pending project changes and preparing video showcase scenarios on 18 November 2026. This extends the earlier repository/README scope to video planning. Recording, upload, email delivery and deployment have not been requested in this step. Source publication is authorized independently of the remaining T09 human/release gates.
 
 ## Repository handoff
 
-This folder is now an independent Git repository; verify root, history and remotes before publishing it. Inspect the source manifest and exclude environment secrets and generated/local files. Original SongRise nesting references are historical. Owner/name/visibility remain delivery decisions after the implementation is ready; a local commit does not publish a repository.
+The repository is [navneet-p-lab/parent-pause](https://github.com/navneet-p-lab/parent-pause). This folder is its independent Git root; inspect actual Git/remote state for the latest published SHA. Include all reviewed portable changes, the current README, test/evidence files and video script. Exclude ignored environment secrets, dependencies, generated output, local sessions, evaluation artifacts and personal browser data. Use the Nimbalyst commit widget, then push normally; never force-push over remote work.
 
-Future README should contain: one-sentence product purpose, prerequisites and pinned Node version, `npm ci`, `.env.local` setup from `.env.example`, `npm run dev`, app URL, all test commands, explicit live-vs-fixture mode, no-storage behavior, provider data disclosure, safety limits, architectural tradeoffs and planning/agent-log links. No actual secret value in examples.
+The [README](../README.md) provides the current Node 22/npm setup, exact `COACH_PROVIDER=openai|fixtures` values, Terra default, live-vs-fixture behavior, device-local storage/privacy limits, commands and known release gates. Earlier page-memory-only descriptions are superseded by owner-authorized browser localStorage. No account or app database has been added.
 
-Expected environment names: `OPENAI_API_KEY`, `OPENAI_MODEL`, `COACH_PROVIDER=live|fixtures`, configured allowed origin. Implement exact validation and document all defaults. Fixture mode is only for local/test use; fail closed if enabled on a live deployment.
+## Video handoff
 
-Verify in a clean checkout with no parent workspace dependencies. Run deterministic checks, then a live everyday case, Urdu case and crisis case. Inspect browser network and server logs for sensitive content/secret exposure. No deployment is needed by the quoted assignment unless the owner wants one.
+Use the [copy-ready video scenarios](video-scenarios.md). The two-minute sequence demonstrates English coaching and a context-aware follow-up, a recap plus thanks, Urdu replies, device-local History and authored emergency guidance. Optional clips cover professional boundaries, uncertain pause/resume and cancel/retry. The script names exact inputs, expected visible behavior, narration and failure criteria; it is not evidence of a completed live-model rehearsal or recording.
 
-## Two-minute walkthrough storyboard
+Use synthetic examples and the actual app/API/safety pipeline. Keep fixture disclosures visible when applicable, disclose shortened waiting time and never replace a failed live response with invented output. Do not show keys, personal chats or logs. The latest deterministic verification is recorded in [conversation-understanding evidence](evidence/conversation-understanding-2026-11-18.md); earlier live comparison results do not validate the newest prompt revisions. Native Urdu/human safeguarding/manual release review and the existing paid-usage reconciliation remain pending.
 
-| Time | Show | Say / demonstrate |
-|---|---|---|
-| 0:00–0:12 | Main page | “ParentPause gives parents a brief plan in English or Urdu. No login or database.” |
-| 0:12–0:40 | Everyday input: “My 6-year-old argues when playtime ends at bedtime.” | Send live; point out short actions and the single check-in. Enter one follow-up to show context. |
-| 0:40–1:00 | Urdu toggle + Urdu example | Show actual RTL layout, translated labels, readable Urdu and mixed digits. |
-| 1:00–1:27 | New conversation; crisis: “My child says they are going to hurt themselves right now.” | Show the authored escalation, explicit limit and immediate human-help direction. Explain that no routine plan or delayed check-in is offered. |
-| 1:27–1:43 | Narrow viewport and new conversation | Show mobile layout and history clearing. Mention page-memory-only history and external model processing. |
-| 1:43–2:00 | Repo README and test summary | Point to setup, safety tests/live eval evidence, and AI work log. Mention no service is monitoring the chat. |
+## Completion evidence
 
-Use synthetic examples only. Record the real implementation, not this prototype. Confirm video audio and readability; hide API keys, browser personal tabs and terminal secrets. If editing out long waits, disclose the cut rather than implying better latency. Captions are helpful. The crisis demonstration must use the implemented safety pipeline, not a hard-coded demo switch masquerading as a model result.
-
-## Final email contents
-
-The final delivery task inserts real links to the GitHub repository and the approximately two-minute Loom or equivalent recording. Add one short sentence on the no-login English/Urdu scope and any material limitation. Do not send placeholders as completed deliverables. Sending the email itself requires the owner's explicit instruction.
-
-## Pilot readiness, beyond the assessment
-
-1. Confirm traffic, target regions, budget and support owner.
-2. Independent safeguarding review and native Urdu evaluation, including adversarial and indirect risk cases.
-3. Explicitly selected regional resources with source, last-verified date, refresh owner and graceful unavailable behavior.
-4. Shared rate limiting or gateway controls, real spend circuit breaker, request quotas and incident monitoring without content logs.
-5. Provider-retention review and user-facing privacy details; no “completely private” promise.
-6. Accessibility/device testing, measured latency/error rates, controlled rollout and a rollback switch.
-7. Add persistent history or reminders only after separate consent, retention/deletion and delivery design.
+Record the actual commit and remote SHA only after they exist. A source commit/push does not certify live response quality or close T09's remaining gates. No hosted deployment, video recording/upload, independent safeguarding/native-reader approval or email sending is implied. When a recording is later requested, verify its readable output/audio and use an owner-authorized destination before reporting a video link.

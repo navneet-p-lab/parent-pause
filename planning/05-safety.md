@@ -1,5 +1,14 @@
 # Safety behavior specification
 
+Latest owner amendment, 18 November: mixed uncertainty/thanks plus a recap request must receive a concise summary of prior advice rather than repeat a medical/legal boundary or close early. Added reviewed question-free summaries and a localized “Summarize so far” control. Follow-up plans may contain one useful step (one to three total), with generation/review instructions to adapt advice, accept unknown answers and avoid repeated suggestions/questions. Urgent-risk precedence, independent review, Terra and device-local history remain. See [conversation-understanding evidence](evidence/conversation-understanding-2026-11-18.md). Earlier exactly-one-question and two-to-three-step requirements are superseded for these response shapes.
+
+
+Latest owner correction,18November: implement a History tab for older conversations; owner explicitly selected **Keep on this device** after clarification, authorizing browser localStorage persistence across reload/reopen with no database/account. This supersedes earlier page-memory/no-browser-storage requirements. New conversation archives current context/draft; opening history restores it, deletion is confirmed, and clear-all removes saved/current chats. Provider/safety routing and release gates remain unchanged. See [history evidence](evidence/conversation-history-2026-11-18.md).
+
+Latest owner correction,18November: clear courtesy/satisfaction may conclude directly with a question-free authored message after full-context review. Short whole-message courtesy recognition only affects nonurgent routine/professional context; emergency/abuse/self-harm, unresolved known risk, ambiguity, review failures and new concerns retain existing handling. Closing does not assert that a professional concern is resolved. This supersedes the required pause-confirmation step for a conclusive thank-you.
+
+Owner amendment,18November: [conversation v2](contracts-conversation-v2.md) adds satisfaction/pause intent after risk classification. Both authored pause offers and confirmed closings require full-context review; they cannot erase unresolved risk or bypass the existing reassessment of a resolution claim. Only confirmed paused responses omit a follow-up question. Pausing does not provide monitoring or durable history. Earlier risk routes, precedence and authored urgent guidance remain unchanged.
+
 This is a product safety design for an assessment, not clinical validation. All Urdu text is a draft pending native-reader review. No crisis number is supplied because the region is deliberately unknown.
 
 ## Boundaries

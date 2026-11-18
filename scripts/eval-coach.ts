@@ -15,7 +15,7 @@ import { SAFETY_POLICY_REVISION } from "../src/lib/server/safety/policy";
 const caseSchema = z.strictObject({
   id: z.string().min(1).max(100), locale: z.enum(["en", "ur"]),
   input: z.string(), priorUserMessages: z.array(z.string()).max(7),
-  expectedKinds: z.array(z.enum(["plan", "clarify", "boundary", "escalation"])).min(1),
+  expectedKinds: z.array(z.enum(["plan", "clarify", "boundary", "escalation", "pause_offer", "paused", "summary"])).min(1),
   expectedCategories: z.array(z.enum(["emergency", "abuse", "self_harm"])).optional(),
   requirements: z.array(z.string()),
 });

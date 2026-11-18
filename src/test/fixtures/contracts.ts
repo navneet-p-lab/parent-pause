@@ -1,7 +1,7 @@
 import type { CoachRequest, CoachResponse, Locale } from "@/lib/contracts";
 
 export const REQUEST_ID = "8fb7f12a-e62b-4b45-a072-7f88d7811e64";
-type ResponseFixtures = { [K in CoachResponse["kind"]]: Extract<CoachResponse, { kind: K }> };
+type ResponseFixtures = { [K in "plan" | "clarify" | "boundary" | "escalation"]: Extract<CoachResponse, { kind: K }> };
 
 /** Synthetic examples, not reviewed coaching/safety templates. Urdu is draft. */
 export const responseFixtures = {

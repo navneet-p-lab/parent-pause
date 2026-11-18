@@ -1,8 +1,8 @@
 import { z } from "zod";
 import type { ReactNode } from "react";
 
-/** Contract t01-v1. All content is untrusted plain text, never HTML/Markdown. */
-export const CONTRACT_REVISION = "t01-v1";
+/** Contract t01-v4. All content is untrusted plain text, never HTML/Markdown. */
+export const CONTRACT_REVISION = "t01-v4";
 export const LIMITS = {
   userCodePoints: 2_000,
   transcriptEntries: 15,
@@ -49,14 +49,24 @@ const escalationWireSchema = z.strictObject({
   kind: z.literal("escalation"), locale: localeSchema, category: escalationCategorySchema,
   message: z.string(), actions: z.array(z.string()), checkIn: checkInWireSchema,
 });
+const pauseOfferWireSchema = z.strictObject({
+  kind: z.literal("pause_offer"), locale: localeSchema, acknowledgment: z.string(), checkIn: checkInWireSchema,
+});
+const pausedWireSchema = z.strictObject({ kind: z.literal("paused"), locale: localeSchema, message: z.string() });
+const summaryWireSchema = z.strictObject({
+  kind: z.literal("summary"), locale: localeSchema, acknowledgment: z.string(), steps: z.array(z.string()),
+});
 
 export const providerResponseWireSchema = z.strictObject({
-  response: z.union([planWireSchema, clarifyWireSchema, boundaryWireSchema, escalationWireSchema]),
+  response: z.union([planWireSchema, clarifyWireSchema, boundaryWireSchema, escalationWireSchema, pauseOfferWireSchema, pausedWireSchema, summaryWireSchema]),
 });
+const conversationIntentSchema = z.enum(["continue", "summarize", "close", "offer_pause", "confirm_pause"]);
 export const classificationSchema = z.strictObject({
   category: z.enum(["routine", "unclear", "medical_legal", "emergency", "abuse", "self_harm"]),
+  // Old local fixtures/recorded classifications have no intent. They continue coaching.
+  intent: conversationIntentSchema.optional(),
 });
-export const providerClassificationWireSchema = classificationSchema;
+export const providerClassificationWireSchema = classificationSchema.extend({ intent: conversationIntentSchema });
 export const providerReviewWireSchema = z.strictObject({
   decision: z.enum(["allow", "block", "escalate"]),
   category: escalationCategorySchema.nullable(),
@@ -72,7 +82,7 @@ const acknowledgment = boundedText(LIMITS.acknowledgmentCodePoints);
 const message = boundedText(LIMITS.messageCodePoints);
 export const planSchema = planWireSchema.extend({
   acknowledgment,
-  steps: z.array(boundedText(LIMITS.stepCodePoints)).min(2).max(3),
+  steps: z.array(boundedText(LIMITS.stepCodePoints)).min(1).max(3),
   checkIn: checkInSchema,
 });
 export const clarifySchema = clarifyWireSchema.extend({ acknowledgment, checkIn: checkInSchema });
@@ -82,15 +92,27 @@ export const boundarySchema = boundaryWireSchema.extend({
 export const escalationSchema = escalationWireSchema.extend({
   message, actions: z.array(boundedText(LIMITS.actionCodePoints)).min(1).max(3), checkIn: checkInSchema,
 });
+export const pauseOfferSchema = pauseOfferWireSchema.extend({ acknowledgment, checkIn: checkInSchema });
+export const pausedSchema = pausedWireSchema.extend({ message });
+export const summarySchema = summaryWireSchema.extend({
+  acknowledgment, steps: z.array(boundedText(LIMITS.stepCodePoints)).min(1).max(5),
+});
 
 export const coachResponseSchema = z.discriminatedUnion("kind", [
-  planSchema, clarifySchema, boundarySchema, escalationSchema,
+  planSchema, clarifySchema, boundarySchema, escalationSchema, pauseOfferSchema, pausedSchema, summarySchema,
 ]).superRefine((response, ctx) => {
+  if (response.kind === "summary") {
+    const normalized = response.steps.map((step) => step.normalize("NFKC").toLowerCase().replace(/[\p{P}\p{White_Space}]+/gu, " ").trim());
+    if (new Set(normalized).size !== normalized.length) ctx.addIssue({ code: "custom", message: "Steps must be distinct" });
+  }
+  if (response.kind === "summary" && [response.acknowledgment, ...response.steps].some((text) => /[?؟]/u.test(text))) {
+    ctx.addIssue({ code: "custom", message: "A summary must not ask another question" });
+  }
   if (response.locale !== "en") return;
   let fields: string[];
   let max: number;
-  if (response.kind === "plan") {
-    fields = [response.acknowledgment, ...response.steps, response.checkIn.text];
+  if (response.kind === "plan" || response.kind === "summary") {
+    fields = [response.acknowledgment, ...response.steps, ...(response.kind === "plan" ? [response.checkIn.text] : [])];
     max = LIMITS.planEnglishWords;
   } else if (response.kind === "escalation") {
     fields = [response.message, ...response.actions, response.checkIn.text];
@@ -165,11 +187,15 @@ export type ResponseLabels = {
   user: string;
   coach: string;
   planHeading: string;
+  summaryHeading: string;
   clarificationHeading: string;
   boundaryHeading: string;
   escalationHeading: string;
+  pauseOfferHeading: string;
+  pausedHeading: string;
   checkInHeading: string;
   loading: string;
+  loadingHints: readonly [string, string, string];
   errors: Record<FailureCode, string>;
 };
 export type CoachResponseProps = { response: CoachResponse; labels: ResponseLabels };
